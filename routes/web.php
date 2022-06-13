@@ -15,3 +15,5 @@ use App\Http\Controllers\UserBuyController;
 */
 Route::get('/', [UserBuyController::class, 'index']);
 
+Route::post('/User/Buy/Purchase', [UserBuyController::class, 'cc_purchase']);
+
