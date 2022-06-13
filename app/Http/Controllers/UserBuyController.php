@@ -186,6 +186,18 @@ class UserBuyController extends Controller{
         } 
         //  GOOD Payment -----------------------------------------------------------
         $transaction = $result->transaction;
+
+        $New_Transactions->transactionid = $transaction->id;
+        $New_Transactions->braintree_customerid = $transaction->customerDetails->id;
+        $New_Transactions->lic_id = 12;
+        $New_Transactions->last4 = $transaction->creditCardDetails->last4;
+        $New_Transactions->expmm = $transaction->creditCardDetails->expirationMonth;
+        $New_Transactions->expyyyy = $transaction->creditCardDetails->expirationYear;
+        $New_Transactions->status = $transaction->status;
+        $New_Transactions->description = 'Web Purchase';
+        $New_Transactions->new_site = 1;
+        $New_Transactions->save();
+
         dd($transaction);
 
     }
