@@ -64,24 +64,30 @@ class UserBuyController extends Controller{
         $Free_Lic_SC = 0;
         /// Temp End ------
 
-
-        $gateway = new Braintree\Gateway([
-            'environment' => config('services.braintree.environment'),
-            'merchantId' => config('services.braintree.merchantId'),
-            'publicKey' => config('services.braintree.publicKey'),
-            'privateKey' => config('services.braintree.privateKey')
+        $config = new Braintree\Configuration([
+            'environment' => 'sandbox',
+            'merchantId' => 'qcw7rzf5956rvgb8',
+            'publicKey' => 'w88wyfgtz3nfm35v',
+            'privateKey' => '58e243b5184f2a20285a4459c90fb1fb'
         ]);
 
+        $gateway = new Braintree\Gateway($config);
 
         $token = $gateway->ClientToken()->generate();
-
-
 
         return view('buy', compact('DoIChargeVat', 'SC_Price', 'ThisUser', 'AA_Price' ,'IG_Price', 'SI_Price', 'DE_Price', 'PR_Price', 'Total_Lic_AA', 'Total_Lic_IG', 'Total_Lic_PR', 'Total_Lic_SI', 'Total_Lic_DE', 'Total_Lic_SC', 'Free_Lic_AA', 'Free_Lic_IG', 'Free_Lic_PR', 'Free_Lic_SI', 'Free_Lic_DE', 'Free_Lic_SC', 'token'));
     }
 
     public function cc_purchase(Request $request){
-
+        
+        $config = new Braintree\Configuration([
+            'environment' => 'sandbox',
+            'merchantId' => 'qcw7rzf5956rvgb8',
+            'publicKey' => 'w88wyfgtz3nfm35v',
+            'privateKey' => '58e243b5184f2a20285a4459c90fb1fb'
+        ]);
+        
+        $gateway = new Braintree\Gateway($config);
         //// gather plugins from form
         $aa_y = request('AA_Year');
         $ig_y = request('IG_Year');
@@ -104,12 +110,10 @@ class UserBuyController extends Controller{
         $user_id = request('user_id');
         $email = request('their_email');
         $VatNumber = request('Form_VatNumber');
-//        $ThisUser = User::where('id', $user_id)->first();
-        $User = User::where('id', request('user_id'))->first();
+        $ThisUser = User::where('id', $user_id)->first();
+        
 
-
-
-        ///// Add New Transaction for this sale
+        ///// Add New Transaction for this sale 
         $New_Transactions = new Licence_Transactions;
         $New_Transactions->description = 'Pre Order';
         $New_Transactions->user_id = $user_id;
@@ -141,66 +145,60 @@ class UserBuyController extends Controller{
 
         $OrderId = $New_Transactions->id;
 
-
-        $gateway = new Braintree\Gateway([
-            'environment' => config('services.braintree.environment'),
-            'merchantId' => config('services.braintree.merchantId'),
-            'publicKey' => config('services.braintree.publicKey'),
-            'privateKey' => config('services.braintree.privateKey')
-        ]);
-
-
         $result = $gateway->transaction()->sale([
-
-            'amount' => $request->amount,
-
-            'paymentMethodNonce' => $request->payment_method_nonce,
-
-            //            'orderId' => rand(5,10),
-
+            'deviceData' => $deviceDataFromTheClient,
+            'orderId' => $OrderId,
+            'amount' => $amount,
+            'paymentMethodNonce' => $nonce,
             'customer' => [
-                'firstName'         => $User->first_name ?? 'Default',
-                'lastName'          => $User->last_name ?? 'Default',
-                'company'           => $request->Form_VatNumber ?? '0',
-                'email'             => $request->their_email,
-                'phone'             => '281.330.8004',
-                'fax'               => '419.555.1235',
-                'website'           => 'www.abc.com'
+                //'cardholderName' => $cardholderName,
+                'firstName' => 'Id: '.$user_id.' '.$ThisUser->first_name,
+                'lastName' => $ThisUser->last_name,
+                'company' => $VatNumber,
+                'email' => $email,
             ],
-
             'billing' => [
-                'firstName'         => $User->first_name,
-                'lastName'          => $User->last_name,
-                'streetAddress'     => $User->address,
-                'extendedAddress'   => $User->city,
+                'firstName'         => $ThisUser->first_name,
+                'lastName'          => $ThisUser->last_name,
+                'streetAddress'     => $ThisUser->address,
+                'extendedAddress'   => $ThisUser->city,
                 'locality'          => '',
                 'region'            => '',
-                'postalCode'        => $User->zip,
-                'countryCodeAlpha2' => $User->country,
+                'postalCode'        => $ThisUser->zip,
+                'countryCodeAlpha2' => $ThisUser->country,
             ],
-
             'options' => [
-                'submitForSettlement'   => true,
+                'submitForSettlement' => true,
                 'storeInVaultOnSuccess' => true,
+                'storeInVault' => true,
             ]
         ]);
 
-
-        if ($result->success)
-        {
-            dd(" transaction successfully T-ID:" . $result->transaction->id);
-        }else
-        {
+        //  Bad Payment and reture to user
+        if ($result->success != true){
+            $The_New_Transactions = $New_Transactions->id;
+            $DidDelete = Licence_Transactions::where('id', $The_New_Transactions)->delete();
             $errorString = "";
-
-            foreach ($result->errors->deepAll() as $error) {
+            foreach ($result->errors->deepAll() as $error) 
                 $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
-            }
 
             return back()->withErrors('An error occurred with the message: '.$result->message);
-        }
+        } 
+        //  GOOD Payment -----------------------------------------------------------
+        $transaction = $result->transaction;
 
+        $New_Transactions->transactionid = $transaction->id;
+        $New_Transactions->braintree_customerid = $transaction->customerDetails->id;
+        $New_Transactions->lic_id = 12;
+        $New_Transactions->last4 = $transaction->creditCardDetails->last4;
+        $New_Transactions->expmm = $transaction->creditCardDetails->expirationMonth;
+        $New_Transactions->expyyyy = $transaction->creditCardDetails->expirationYear;
+        $New_Transactions->status = $transaction->status;
+        $New_Transactions->description = 'Web Purchase';
+        $New_Transactions->new_site = 1;
+        $New_Transactions->save();
+
+        dd($transaction);
 
     }
-
 }
