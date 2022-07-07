@@ -455,7 +455,7 @@ $SiNi_admin_id = "Shopping";
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="input-group pay-group">
-                                                        <input disabled id="pay-btn" style="width: 100%;" class="btn btn-sini" type="submit" value="Loading...">
+                                                        <input disabled id="pay-btn" class="btn btn-success" type="submit" value="Loading...">
                                                     </div>
                                                 </div>
 
@@ -483,30 +483,30 @@ $SiNi_admin_id = "Shopping";
                                         </div>
                                       
                                         <div class="row" style="padding-top: 20px;">
-                                            <div class="col-md-6  hidden">
-                                                <h4> ----------------------------- Remove Below ------------------------------</h4>
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top: 20px;">
-                                            <div class="col-md-6  hidden">
-                                                <p class="lead sdfsdf">Payment method nonce received:</p>
+                                            <div class="col-md-3">
+                                                <p class="lead sdfsdf">nonce</p>
                                                 <div class="input-group nonce-group hidden">
                                                     <input readonly name="nonce" class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 nonce-group hidden">
+                                            <div class="col-md-9 nonce-group hidden">
+                                                <p class="lead"> Payment method nonce received: </p>
                                                 <div class="input-group">
                                                     <span class="input-group-addon lead"></span>
-                                                    <input type="hidden" readonly name="nonce" class="form-control">
+                                                    <input readonly name="nonce" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-xs-12">
                                                 <table class="table">
-                                                    <tr><th>successful with no challenge</th><th>successful with challenge</th><th>unsuccessful with challenge</th></tr>
-                                                    <tr><th>4000000000001000</th><th>4000000000001091</th><th>4000000000001109</th></tr>
+                                                    <tr><th>Field</th><th>Value</th></tr>
+                                                    <tr><td>Number (successful with no challenge)</td><td>4000000000001000</td></tr>
+                                                    <tr><td>Number (successful with challenge)</td><td>4000000000001091</td></tr>
+                                                            <tr><td>Number (unsuccessful with challenge)</td><td>4000000000001109</td></tr>
+                                                    <tr><td>Expiration Date (for sandbox testing, year must be exactly 3 years in the future)</td><td>12/22</td></tr>
+                                                    <tr><td>CVV</td><td>123</td></tr>
                                                 </table>
                                             </div>
                                         </div>
