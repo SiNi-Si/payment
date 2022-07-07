@@ -325,12 +325,11 @@ $SiNi_admin_id = "Shopping";
                         <div class="tab-pane fade show active" id="SiNi_Card">
                             <div class="card">
                                 <div class="card-body" style="padding: 30px; min-height: 280px;">
-
-                                    
-                                    <form action="javascript:void(0)" class="container-full">
+                                    <form action="{{ url('/User/Buy/Purchase') }}" class="container-full" method="POST" id="payment-form">
                                         <div class="row">
-                                            <div class="col-xs-12">
-                                                <p>This is a functional example of performing 3D Secure verification on a credit card tokenized with Hosted Fields. For 3DS 2.0, it's highly recomended to supply additional information about the customer to achieve a frictionless flow (no challenge presented).</p>
+                                            <div class="col-md-12">
+                                                <h4>SiNi Software does not store any credit card information on our server.  We use a secure payment system call <a href="https://www.braintreepayments.com/" target="_blank">BrainTree</a> owned by paypal.</h4>
+                                                <hr>
                                             </div>
                                         </div>
                                         <div class="row" style="padding-bottom: 20px;">
@@ -557,9 +556,12 @@ $SiNi_admin_id = "Shopping";
 
 
 <script>
+var form = document.querySelector('#payment-form');
+var submit = document.querySelector('input[type="submit"]');
+
 var DoIChargeVat = '{{ $DoIChargeVat }}';
 var DoIHaveVatNumber = '{{$ThisUser->vat_number}}';
-
+var Total = 0;
 var Form_Discount = 0;
 var Form_DiscountCode = 0;
 var Form_VatNumber = 0;
@@ -759,7 +761,8 @@ payBtn.addEventListener('click', function(event) {
       onLookupComplete: function (data, next) {
         next();
       },
-      amount: Form_TotalAmount,
+      amount: Total.toFixed(2),
+      //amount: '100.00',
       nonce: payload.nonce,
       bin: payload.details.bin,
       email: billingFields.email.input.value,
@@ -783,9 +786,12 @@ payBtn.addEventListener('click', function(event) {
 
     console.log('verification success:', payload);
     showNonce(payload, true);
-      // send nonce and verification data to your server
-      $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
-      alert(payload);
+    // send nonce and verification data to your server
+    $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
+    //alert(payload.nonce);
+    //alert(Total.toFixed(2));
+    document.querySelector('#nonce').value = payload.nonce;
+    form.submit();
   }).catch(function (err) {
     console.log(err);
     enablePayNow();
@@ -793,537 +799,247 @@ payBtn.addEventListener('click', function(event) {
 });
 
 start();
-/* OLD CODE
-    var form = document.querySelector('#payment-form');
-    var client_token = "{{ $token }}";
-    braintree.dropin.create({
-        authorization: client_token,
-        selector: '#bt-dropin',
-    }, function (createErr, instance) {
-        if (createErr) {
-            console.log('Create Error', createErr);
-            return;
-        }
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            instance.requestPaymentMethod(function (err, payload) {
-                if (err) {
-                    console.log('Request Payment Method Error', err);
-                    return;
-                }
-                // Add the nonce to the form and submit
-                document.querySelector('#nonce').value = payload.nonce;
-                form.submit();
-            });
-        });
-    });
 
-    var form = document.querySelector('#payment-form');
-    var submit = document.querySelector('input[type="submit"]');
-    var cost_amount = document.getElementById("amount").value;
-    var DoIChargeVat = '{{ $DoIChargeVat }}';
-    var DoIHaveVatNumber = '{{$ThisUser->vat_number}}';
+var ThwVatNumber = false;
+var GodeDiscountPercent = 0;
+var AA_Y = <?php echo $AA_Price->price_year; ?>;
+var AA_M = <?php echo $AA_Price->price_month; ?>;
+var IG_Y = <?php echo $IG_Price->price_year; ?>;
+var IG_M = <?php echo $IG_Price->price_month; ?>;
+var SI_Y = <?php echo $SI_Price->price_year; ?>;
+var SI_M = <?php echo $SI_Price->price_month; ?>;
+var PR_Y = <?php echo $PR_Price->price_year; ?>;
+var PR_M = <?php echo $PR_Price->price_month; ?>;
+var DE_Y = <?php echo $DE_Price->price_year; ?>;
+var DE_M = <?php echo $DE_Price->price_month; ?>;
 
-    var Form_Discount = 0;
-    var Form_DiscountCode = 0;
-    var Form_VatNumber = 0;
-    var Form_Vat = 0;
-    var Form_TotalAmount = 0;
-    var Form_Amount = 0;
 
-    braintree.client.create({
-        authorization: '{{ $token }}'
-    }, function (clientErr, clientInstance) {
-        if (clientErr) {
-            console.error(clientErr);
-            return;
-        }
-        braintree.dataCollector.create({
-            client: clientInstance,
-            kount: true
-        }, function (err, dataCollectorInstance) {
-            if (err) {
-                // Handle error in creation of data collector
-                return;
-            }
-            // At this point, you should access the dataCollectorInstance.deviceData value and provide it
-            // to your server, e.g. by injecting it into your form as a hidden input.
-            var deviceData = dataCollectorInstance.deviceData;
-            document.getElementById("dataCollector").value = deviceData;
-        });
 
-        braintree.hostedFields.create({
-                client: clientInstance,
-                styles: {
-                    'input': {
-                        'font-size': '16px',
-                        'padding': '9px',
-                    },
-                    // Styling element state
-                    ':focus': {
-                        'color': '#fff',
-                    },
-                    '.valid': {
-                        'color': '#28a745',
-                        'border-color': '#28a745',
-                        'border-style': 'solid',
-                        'border-width': 'thin',
-                    },
-                    '.invalid': {
-                        'color': '#dc3545',
-                        'border-color': '#dc3545',
-                        'border-style': 'solid',
-                        'border-width': 'thin',
-                    },
-                    '::-webkit-input-placeholder': {
-                        'color': '#555',
-                    },
-                },
-                fields: {
-                    number: {
-                        selector: '#cc-number',
-                        placeholder: '1111 1111 1111 1111'
-                    },
-                    cvv: {
-                        selector: '#cc-cvv',
-                        placeholder: '3 or 4 digit code on back'
-                    },
-                    expirationDate: {
-                        selector: '#cc-expiration',
-                        placeholder: 'mm/yy'
-                    },
-                    postalCode: {
-                        selector: '#postal-code',
-                        placeholder: 'Post Code'
-                    }
-                }
-            },
-            function (err, hostedFieldsInstance) {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
+function RunMath() {
+    var AboveDiscount = "NO";
+    var FullYearDiscount = "NO";
+    var UserDiscount = 0;
+    var UserDiscountAmount = 0;
 
-                function createInputChangeEventListener(element) {
-                    return function () {
-                        validateInput(element);
-                    }
-                }
+    var AA_Y_C = document.getElementById("AA_Year").value;
+    var IG_Y_C = document.getElementById("IG_Year").value;
+    var SI_Y_C = document.getElementById("SI_Year").value;
+    var PR_Y_C = document.getElementById("PR_Year").value;
+    var DE_Y_C = document.getElementById("DE_Year").value;
+    var AA_M_C = document.getElementById("AA_Month").value;
+    var IG_M_C = document.getElementById("IG_Month").value;
+    var SI_M_C = document.getElementById("SI_Month").value;
+    var PR_M_C = document.getElementById("PR_Month").value;
+    var DE_M_C = document.getElementById("DE_Month").value;
 
-                function setValidityClasses(element, validity) {
-                    if (validity) {
-                        element.removeClass('is-invalid');
-                        element.addClass('is-valid');
-                    }
-                    else {
-                        element.addClass('is-invalid');
-                        element.removeClass('is-valid');
-                    }
-                }
+    var UserAmount_Y = Number(AA_Y_C) + Number(IG_Y_C) + Number(SI_Y_C) + Number(PR_Y_C) + Number(DE_Y_C);
+    var UserAmount_M = Number(AA_M_C) + Number(IG_M_C) + Number(SI_M_C) + Number(PR_M_C) + Number(DE_M_C);
 
-                function validateInput(element) {
-                    if (!element.val().trim()) {
-                        setValidityClasses(element, false);
-                        return false;
-                    }
-                    setValidityClasses(element, true);
-                    return true;
-                }
+    if(UserAmount_Y > 4 && UserAmount_Y < 11){
+        document.getElementById("DiscountShow").innerHTML = '5% Off Price';
+        document.getElementById('DiscountShow').style.visibility = 'visible';
+        FullYearDiscount = "YES";
+        UserDiscount = 5;
+    }
 
-                function validateEmail () {
-                    var baseValidity = validateInput(email);
+    if(UserAmount_Y > 10 && UserAmount_Y < 100000){
+        document.getElementById("DiscountShow").innerHTML = '10% Off Price';
+        document.getElementById('DiscountShow').style.visibility = 'visible';
+        FullYearDiscount = "YES";
+        UserDiscount = 10;
+    }
+    if(UserAmount_Y > 10 && UserAmount_Y < 100000){
 
-                    if (!baseValidity) {
-                        return false;
-                    }
-
-                    if (email.val().indexOf('@') === -1) {
-                        setValidityClasses(email, false);
-                        return false;
-                    }
-
-                    setValidityClasses(email, true);
-                    return true;
-                }
-                var ccName = $('#cc-name');
-                var email = $('#email');
-
-                ccName.on('change', function () {
-                    validateInput(ccName);
-                });
-
-                email.on('change', validateEmail);
-
-                hostedFieldsInstance.on('validityChange', function(event) {
-                    var field = event.fields[event.emittedBy];
-
-                    // Remove any previously applied error or warning classes
-                    $(field.container).removeClass('is-valid');
-                    $(field.container).removeClass('is-invalid');
-
-                    if (field.isValid) {
-                        $(field.container).addClass('is-valid');
-                    }
-                    else if (field.isPotentiallyValid) {
-                        // skip adding classes if the field is
-                        // not valid, but is potentially valid
-                    }
-                    else {
-                        $(field.container).addClass('is-invalid');
-                    }
-                });
-
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-
-                    var formIsInvalid = false;
-                    var state = hostedFieldsInstance.getState();
-
-                    if (!validateInput($('#cc-name'))) {
-                        formIsInvalid = true;
-                    }
-
-                    Object.keys(state.fields).forEach(function(field) {
-                        if (!state.fields[field].isValid) {
-                            $(state.fields[field].container).addClass('is-invalid');
-                            formIsInvalid = true;
-                        }
-                    });
-
-                    if (formIsInvalid) {
-                        $.Notification.notify('error','top right', 'SiNi Software', 'Reqired Fiulds Are Missing In Your Form');
-                        return;
-                    }
-
-                    hostedFieldsInstance.tokenize({
-                            cardholderName: $('#cc-name').val()
-                        },
-                        function (tokenizeErr, payload) {
-
-                            if (tokenizeErr) {
-                                $.Notification.notify('error','top right', 'SiNi Software', 'Reqired Fiulds Are Missing In Your Form');
-                                //console.error(tokenizeErr);
-                                return;
-                            }
-
-                            // If this was a real integration, this is where you would
-                            // send the nonce to your server.
-                            // console.log('Got a nonce: ' + payload.nonce);
-                            document.getElementById('paypal-button').style.visibility = 'hidden';
-                            document.getElementById("paypal_button_good_message").style.visibility = "visible";
-                            document.getElementById("paypal_button_good_message").style.display = "block";
-                            document.getElementById("submit-button").style.display = "none";
-                            $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
-                            document.querySelector('#nonce').value = payload.nonce;
-                            form.submit();
-                        });
-                }, false);
-            });
-        braintree.paypalCheckout.create({
-            client: clientInstance
-        }, function (paypalCheckoutErr, paypalCheckoutInstance) {
-
-            if (paypalCheckoutErr) {
-                document.getElementById("paypal_button_bad_message").style.display = "block";
-                //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
-                document.getElementById('paypal-button').style.visibility = 'hidden';
-                //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
-                return;
-            }
-
-            // Set up PayPal with the checkout.js library
-            paypal.Button.render({
-                env: 'production', // 'production' Or 'sandbox'
-                //commit: true, // This will add the transaction amount to the PayPal button
-                style: {
-                    size: 'medium',
-                    color: 'blue',
-                    shape: 'rect',
-                    tagline: false,
-                },
-                payment: function () {
-                    return paypalCheckoutInstance.createPayment({
-                        //flow: 'checkout', // Required
-                        flow: 'vault', // Required
-                        amount: Total, // Required
-                        currency: 'GBP', // Required
-                        enableShippingAddress: false,
-                        storeInVaultOnSuccess: true,
-                        //storeInVault: true,
-
-                    });
-                },
-
-                onAuthorize: function (data, actions) {
-                    return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
-                        // Submit `payload.nonce` to your server
-                        document.getElementById('paypal-button').style.visibility = 'hidden';
-                        document.getElementById("paypal_button_good_message").style.visibility = "visible";
-                        document.getElementById("paypal_button_good_message").style.display = "block";
-                        document.getElementById("submit-button").style.display = "none";
-                        document.querySelector('#nonce').value = payload.nonce;
-                        form.submit();
-                    });
-                },
-
-                onCancel: function (data) {
-                    console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
-                    document.getElementById('paypal-button').style.visibility = 'visible';
-                    $.Notification.notify('error','top right', 'SiNi Software', 'PayPal payment cancelled');
-                },
-
-                onError: function (err) {
-                    document.getElementById("paypal_button_bad_message").style.visibility = "visible";
-                    document.getElementById("paypal_button_bad_message").style.display = "block";
-                    document.getElementById('paypal-button').style.visibility = 'hidden';
-                }
-            }, '#paypal-button').then(function () {
-                // The PayPal button will be rendered in an html element with the id
-            });
-        });
-    });
-*/
-    //////   my stuff
-    var ThwVatNumber = false;
-    var GodeDiscountPercent = 0;
-    var AA_Y = <?php echo $AA_Price->price_year; ?>;
-    var AA_M = <?php echo $AA_Price->price_month; ?>;
-    var IG_Y = <?php echo $IG_Price->price_year; ?>;
-    var IG_M = <?php echo $IG_Price->price_month; ?>;
-    var SI_Y = <?php echo $SI_Price->price_year; ?>;
-    var SI_M = <?php echo $SI_Price->price_month; ?>;
-    var PR_Y = <?php echo $PR_Price->price_year; ?>;
-    var PR_M = <?php echo $PR_Price->price_month; ?>;
-    var DE_Y = <?php echo $DE_Price->price_year; ?>;
-    var DE_M = <?php echo $DE_Price->price_month; ?>;
-
-    var Total = 0;
-
-    function RunMath() {
-        var AboveDiscount = "NO";
-        var FullYearDiscount = "NO";
-        var UserDiscount = 0;
-        var UserDiscountAmount = 0;
-
-        var AA_Y_C = document.getElementById("AA_Year").value;
-        var IG_Y_C = document.getElementById("IG_Year").value;
-        var SI_Y_C = document.getElementById("SI_Year").value;
-        var PR_Y_C = document.getElementById("PR_Year").value;
-        var DE_Y_C = document.getElementById("DE_Year").value;
-        var AA_M_C = document.getElementById("AA_Month").value;
-        var IG_M_C = document.getElementById("IG_Month").value;
-        var SI_M_C = document.getElementById("SI_Month").value;
-        var PR_M_C = document.getElementById("PR_Month").value;
-        var DE_M_C = document.getElementById("DE_Month").value;
-
-        var UserAmount_Y = Number(AA_Y_C) + Number(IG_Y_C) + Number(SI_Y_C) + Number(PR_Y_C) + Number(DE_Y_C);
-        var UserAmount_M = Number(AA_M_C) + Number(IG_M_C) + Number(SI_M_C) + Number(PR_M_C) + Number(DE_M_C);
-
-        if(UserAmount_Y > 4 && UserAmount_Y < 11){
+    }
+    else{
+        if(UserAmount_M > 4 && UserAmount_M < 11){
             document.getElementById("DiscountShow").innerHTML = '5% Off Price';
             document.getElementById('DiscountShow').style.visibility = 'visible';
-            FullYearDiscount = "YES";
             UserDiscount = 5;
         }
+    }
 
-        if(UserAmount_Y > 10 && UserAmount_Y < 100000){
-            document.getElementById("DiscountShow").innerHTML = '10% Off Price';
-            document.getElementById('DiscountShow').style.visibility = 'visible';
-            FullYearDiscount = "YES";
-            UserDiscount = 10;
-        }
-        if(UserAmount_Y > 10 && UserAmount_Y < 100000){
+    if(UserAmount_M > 10 && UserAmount_M < 100000){
+        document.getElementById("DiscountShow").innerHTML = '10% Off Price';
+        document.getElementById('DiscountShow').style.visibility = 'visible';
+        UserDiscount = 10;
+    }
 
-        }
-        else{
-            if(UserAmount_M > 4 && UserAmount_M < 11){
-                document.getElementById("DiscountShow").innerHTML = '5% Off Price';
-                document.getElementById('DiscountShow').style.visibility = 'visible';
-                UserDiscount = 5;
-            }
-        }
+    if(UserAmount_M < 5 && UserAmount_Y < 5){
+        document.getElementById('DiscountShow').style.visibility = 'hidden';
+    }
 
-        if(UserAmount_M > 10 && UserAmount_M < 100000){
-            document.getElementById("DiscountShow").innerHTML = '10% Off Price';
-            document.getElementById('DiscountShow').style.visibility = 'visible';
-            UserDiscount = 10;
-        }
+    var AA_Y_V = AA_Y * AA_Y_C;
+    var IG_Y_V = IG_Y * IG_Y_C;
+    var SI_Y_V = SI_Y * SI_Y_C;
+    var PR_Y_V = PR_Y * PR_Y_C;
+    var DE_Y_V = DE_Y * DE_Y_C;
+    var AA_M_V = AA_M * AA_M_C;
+    var IG_M_V = IG_M * IG_M_C;
+    var SI_M_V = SI_M * SI_M_C;
+    var PR_M_V = PR_M * PR_M_C;
+    var DE_M_V = DE_M * DE_M_C;
 
-        if(UserAmount_M < 5 && UserAmount_Y < 5){
-            document.getElementById('DiscountShow').style.visibility = 'hidden';
-        }
+    var SubTotal = AA_Y_V + IG_Y_V + SI_Y_V + PR_Y_V + DE_Y_V + AA_M_V + IG_M_V + SI_M_V + PR_M_V + DE_M_V;
+    var DiscountAmount = 0;
+    var DiscountTotal = SubTotal;
 
-        var AA_Y_V = AA_Y * AA_Y_C;
-        var IG_Y_V = IG_Y * IG_Y_C;
-        var SI_Y_V = SI_Y * SI_Y_C;
-        var PR_Y_V = PR_Y * PR_Y_C;
-        var DE_Y_V = DE_Y * DE_Y_C;
-        var AA_M_V = AA_M * AA_M_C;
-        var IG_M_V = IG_M * IG_M_C;
-        var SI_M_V = SI_M * SI_M_C;
-        var PR_M_V = PR_M * PR_M_C;
-        var DE_M_V = DE_M * DE_M_C;
+    if(GodeDiscountPercent > 0){
+        DiscountAmount = (GodeDiscountPercent / 100) * SubTotal;
+        DiscountTotal = DiscountTotal - DiscountAmount;
+    }
 
-        var SubTotal = AA_Y_V + IG_Y_V + SI_Y_V + PR_Y_V + DE_Y_V + AA_M_V + IG_M_V + SI_M_V + PR_M_V + DE_M_V;
-        var DiscountAmount = 0;
-        var DiscountTotal = SubTotal;
+    if(UserDiscount > 0){
+        UserDiscountAmount = (UserDiscount / 100) * SubTotal;
+        DiscountAmount = DiscountAmount + UserDiscountAmount;
+        DiscountTotal = DiscountTotal - UserDiscountAmount;
+    }
 
-        if(GodeDiscountPercent > 0){
-            DiscountAmount = (GodeDiscountPercent / 100) * SubTotal;
-            DiscountTotal = DiscountTotal - DiscountAmount;
-        }
-
-        if(UserDiscount > 0){
-            UserDiscountAmount = (UserDiscount / 100) * SubTotal;
-            DiscountAmount = DiscountAmount + UserDiscountAmount;
-            DiscountTotal = DiscountTotal - UserDiscountAmount;
-        }
-
-        /// 0 = no     1 = only if no vat number      2 = yes
-        if(DoIChargeVat == 1){
-            var Vat = (20 / 100) * DiscountTotal;
-            if(ThwVatNumber == true){
-                Vat = 0;
-            }
-        }
-        else{
+    /// 0 = no     1 = only if no vat number      2 = yes
+    if(DoIChargeVat == 1){
+        var Vat = (20 / 100) * DiscountTotal;
+        if(ThwVatNumber == true){
             Vat = 0;
         }
+    }
+    else{
+        Vat = 0;
+    }
 
-        if(DoIChargeVat == 2){
-            var Vat = (20 / 100) * DiscountTotal;
+    if(DoIChargeVat == 2){
+        var Vat = (20 / 100) * DiscountTotal;
+    }
+
+    Total = Vat + DiscountTotal;
+
+    var TotalDiscountAmount = GodeDiscountPercent + UserDiscount;
+    document.getElementById("Form_Discount_Percent").value = TotalDiscountAmount;
+    document.getElementById("Form_Discount").value = DiscountTotal.toFixed(2);
+    document.getElementById("Form_Vat").value = Vat.toFixed(2);
+    document.getElementById("Form_TotalAmount").value = Total.toFixed(2);
+    document.getElementById("Form_Amount").value = SubTotal.toFixed(2);
+
+    document.getElementById("Total").value = ("£" + SubTotal.toFixed(2));
+    document.getElementById("DiscountTotal").value = ("£" + DiscountAmount.toFixed(2));
+    document.getElementById("Total_Discount").value = ("£" + DiscountTotal.toFixed(2));
+    //if(DoIChargeVat > 0){
+    document.getElementById("Vat").value = ("£" + Vat.toFixed(2));
+    //}
+
+    document.getElementById("VatTotal").value = ("£" + Total.toFixed(2));
+    document.getElementById("amount").value = Total.toFixed(2);
+    document.getElementById("CC_Price2").value = Total.toFixed(2);
+
+
+    document.getElementById("CC_AA_Year").value = AA_Y_C;
+    document.getElementById("CC_IG_Year").value = IG_Y_C;
+    document.getElementById("CC_SI_Year").value = SI_Y_C;
+    document.getElementById("CC_DE_Year").value = DE_Y_C;
+    document.getElementById("CC_PR_Year").value = PR_Y_C;
+    document.getElementById("CC_AA_Month").value = AA_M_C;
+    document.getElementById("CC_IG_Month").value = IG_M_C;
+    document.getElementById("CC_SI_Month").value = SI_M_C;
+    document.getElementById("CC_DE_Month").value = DE_M_C;
+    document.getElementById("CC_PR_Month").value = PR_M_C;
+
+    if(document.getElementById("amount").value  > 0){
+        document.getElementById("paypal-button").style.display = "block";
+        document.getElementById("submit_cc_sini").style.display = "block";
+    }
+    else{
+        document.getElementById("paypal-button").style.display = "none";
+        document.getElementById("submit_cc_sini").style.display = "none";
+    }
+}
+
+function GetDiscount() {
+    var discount_imput = document.getElementById("Discount").value;
+
+    var form_data = new FormData();
+    form_data.append('code', discount_imput);
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-
-        Total = Vat + DiscountTotal;
-
-        var TotalDiscountAmount = GodeDiscountPercent + UserDiscount;
-        document.getElementById("Form_Discount_Percent").value = TotalDiscountAmount;
-        document.getElementById("Form_Discount").value = DiscountTotal.toFixed(2);
-        document.getElementById("Form_Vat").value = Vat.toFixed(2);
-        document.getElementById("Form_TotalAmount").value = Total.toFixed(2);
-        document.getElementById("Form_Amount").value = SubTotal.toFixed(2);
-
-        document.getElementById("Total").value = ("£" + SubTotal.toFixed(2));
-        document.getElementById("DiscountTotal").value = ("£" + DiscountAmount.toFixed(2));
-        document.getElementById("Total_Discount").value = ("£" + DiscountTotal.toFixed(2));
-        //if(DoIChargeVat > 0){
-        document.getElementById("Vat").value = ("£" + Vat.toFixed(2));
-        //}
-
-        document.getElementById("VatTotal").value = ("£" + Total.toFixed(2));
-        document.getElementById("amount").value = Total.toFixed(2);
-        document.getElementById("CC_Price2").value = Total.toFixed(2);
-
-
-        document.getElementById("CC_AA_Year").value = AA_Y_C;
-        document.getElementById("CC_IG_Year").value = IG_Y_C;
-        document.getElementById("CC_SI_Year").value = SI_Y_C;
-        document.getElementById("CC_DE_Year").value = DE_Y_C;
-        document.getElementById("CC_PR_Year").value = PR_Y_C;
-        document.getElementById("CC_AA_Month").value = AA_M_C;
-        document.getElementById("CC_IG_Month").value = IG_M_C;
-        document.getElementById("CC_SI_Month").value = SI_M_C;
-        document.getElementById("CC_DE_Month").value = DE_M_C;
-        document.getElementById("CC_PR_Month").value = PR_M_C;
-
-        if(document.getElementById("amount").value  > 0){
-            document.getElementById("paypal-button").style.display = "block";
-            document.getElementById("submit_cc_sini").style.display = "block";
-        }
-        else{
-            document.getElementById("paypal-button").style.display = "none";
-            document.getElementById("submit_cc_sini").style.display = "none";
-        }
-    }
-
-    function GetDiscount() {
-        var discount_imput = document.getElementById("Discount").value;
-
-        var form_data = new FormData();
-        form_data.append('code', discount_imput);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            data: form_data,
-            type: "POST",
-            url:"{{ url('/User/Buy/GetDiscountCode') }}",
-            cache: false,
-            contentType: false,
-            processData: false,
-            dataType:'JSON',
-            success: function(data) {
-                if(data.result == "true"){
-                    document.getElementById("Discount").style.borderColor = "#45464e";
-                    document.getElementById("Discount").style.backgroundColor = "#2f323b";
-
-                    document.getElementById("Discount").disabled = true;
-                    $( ".Discount2" ).empty();
-                    document.getElementById('DiscNumberButton').style.visibility = 'hidden';
-                    document.getElementById("DiscNumberButton").innerHTML = "|";
-                    var mymessage = data.percentage+'% Off Discount';
-                    document.getElementById("Discount1").innerHTML = mymessage;
-                    GodeDiscountPercent = data.percentage;
-                    //document.getElementById("CC_Discount").value = discount_imput;
-                    document.getElementById("Form_DiscountCode").value = document.getElementById("Discount").value;
-                    RunMath();
-
-                }
-                else{
-                    document.getElementById("Discount").style.borderColor = "red";
-                    document.getElementById("Discount2").innerHTML = data.message;
-                    document.getElementById("Form_DiscountCode").value = '';
-                    GodeDiscountPercent = 0;
-                }
-            },
-            error: function(data) {
-                $.Notification.notify('error','top right', 'SiNi Software', 'Some code error with ajax request');
-            }
-        });
-    }
-
-    function GetVat() {
-        var vat_number = document.getElementById("VatNumber").value;
-
-        $.ajax({
-            url: 'https://apilayer.net/api/validate?access_key=adb03562fee81f072f86164a79cb72fa&vat_number=' + vat_number,
-            dataType: 'jsonp',
-            success: function(json) {
-                if(json.valid == true){
-                    document.getElementById("VatNumber").style.borderColor = "#45464e";
-                    document.getElementById("VatNumber").style.backgroundColor = "#2f323b";
-                    document.getElementById("company").innerHTML = 'Good Vat Number';
-                    $( ".company2" ).empty();
-                    document.getElementById("VatNumber").disabled = true;
-                    document.getElementById("VatNumberButton").innerHTML = "|";
-                    document.getElementById('VatNumberButton').style.visibility = 'hidden';
-                    //document.getElementById("CC_VatNumber").value = vat_number;
-                    document.getElementById("Form_VatNumber").value = document.getElementById("VatNumber").value;
-                    ThwVatNumber = true;
-                    RunMath();
-                }
-                else{
-                    document.getElementById("VatNumber").style.borderColor = "red";
-                    document.getElementById("company2").innerHTML = 'Vat Number Not Found';
-                    document.getElementById("Form_VatNumber").value  = '';
-                    ThwVatNumber = false;
-                }
-            }
-        });
-    }
-
-    if(DoIHaveVatNumber != ''){
-        document.getElementById("VatNumber").disabled = true;
-        document.getElementById("Form_VatNumber").value = DoIHaveVatNumber;
-        ThwVatNumber = true;
-        RunMath();
-    }
-
-    $('table tr td').on('input',function(e){
-        RunMath();
     });
+    $.ajax({
+        data: form_data,
+        type: "POST",
+        url:"{{ url('/User/Buy/GetDiscountCode') }}",
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType:'JSON',
+        success: function(data) {
+            if(data.result == "true"){
+                document.getElementById("Discount").style.borderColor = "#45464e";
+                document.getElementById("Discount").style.backgroundColor = "#2f323b";
+
+                document.getElementById("Discount").disabled = true;
+                $( ".Discount2" ).empty();
+                document.getElementById('DiscNumberButton').style.visibility = 'hidden';
+                document.getElementById("DiscNumberButton").innerHTML = "|";
+                var mymessage = data.percentage+'% Off Discount';
+                document.getElementById("Discount1").innerHTML = mymessage;
+                GodeDiscountPercent = data.percentage;
+                //document.getElementById("CC_Discount").value = discount_imput;
+                document.getElementById("Form_DiscountCode").value = document.getElementById("Discount").value;
+                RunMath();
+
+            }
+            else{
+                document.getElementById("Discount").style.borderColor = "red";
+                document.getElementById("Discount2").innerHTML = data.message;
+                document.getElementById("Form_DiscountCode").value = '';
+                GodeDiscountPercent = 0;
+            }
+        },
+        error: function(data) {
+            $.Notification.notify('error','top right', 'SiNi Software', 'Some code error with ajax request');
+        }
+    });
+}
+
+function GetVat() {
+    var vat_number = document.getElementById("VatNumber").value;
+
+    $.ajax({
+        url: 'https://apilayer.net/api/validate?access_key=adb03562fee81f072f86164a79cb72fa&vat_number=' + vat_number,
+        dataType: 'jsonp',
+        success: function(json) {
+            if(json.valid == true){
+                document.getElementById("VatNumber").style.borderColor = "#45464e";
+                document.getElementById("VatNumber").style.backgroundColor = "#2f323b";
+                document.getElementById("company").innerHTML = 'Good Vat Number';
+                $( ".company2" ).empty();
+                document.getElementById("VatNumber").disabled = true;
+                document.getElementById("VatNumberButton").innerHTML = "|";
+                document.getElementById('VatNumberButton').style.visibility = 'hidden';
+                //document.getElementById("CC_VatNumber").value = vat_number;
+                document.getElementById("Form_VatNumber").value = document.getElementById("VatNumber").value;
+                ThwVatNumber = true;
+                RunMath();
+            }
+            else{
+                document.getElementById("VatNumber").style.borderColor = "red";
+                document.getElementById("company2").innerHTML = 'Vat Number Not Found';
+                document.getElementById("Form_VatNumber").value  = '';
+                ThwVatNumber = false;
+            }
+        }
+    });
+}
+
+if(DoIHaveVatNumber != ''){
+    document.getElementById("VatNumber").disabled = true;
+    document.getElementById("Form_VatNumber").value = DoIHaveVatNumber;
+    ThwVatNumber = true;
+    RunMath();
+}
+
+$('table tr td').on('input',function(e){
+    RunMath();
+});
 
 
 </script>
