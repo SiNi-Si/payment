@@ -6,19 +6,14 @@ $SiNi_admin_id = "Shopping";
 <title>SiNi Software | User Buy Software</title>
 
 <script src="https://js.braintreegateway.com/web/dropin/1.33.2/js/dropin.min.js"></script>
-{{--<script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>--}}
 <script src="https://js.braintreegateway.com/web/3.60.0/js/client.min.js"></script>
-{{--<script src="https://js.braintreegateway.com/web/3.60.0/js/paypal-checkout.min.js"></script>--}}
-{{--<script src="https://js.braintreegateway.com/web/3.60.0/js/hosted-fields.min.js"></script>--}}
-{{--<script src="https://js.braintreegateway.com/web/3.60.0/js/data-collector.min.js"></script>--}}
+
 
 
 <style>
-
     .braintree-sheet__header {
         display: none;
     }
-
     .braintree-sheet__content.braintree-sheet__content--form {
         display: flex;
     }
@@ -32,7 +27,6 @@ $SiNi_admin_id = "Shopping";
         font-size: .875rem;
         line-height: 1.5;
     }
-
     .braintree-form__hosted-field.braintree-form-expiration {
         border-radius: 2px;
         background-color: #383a44;
@@ -42,14 +36,11 @@ $SiNi_admin_id = "Shopping";
         padding: 0.25rem 0.5rem;
         font-size: .875rem;
         line-height: 1.5;
-
     }
-
     .braintree-card.braintree-form.braintree-sheet {
         background-color: #3a3c46;
         border: none;
     }
-
     .braintree-sheet__content--form .braintree-form__field-group .braintree-form__label {
         color: #949ba2;
         display: block;
@@ -60,15 +51,12 @@ $SiNi_admin_id = "Shopping";
         padding: 0;
         text-align: left;
     }
-
     .braintree-form-number.braintree-form__hosted-field {
         width: 100%;
         margin-left: 393px;
         /* padding: 0px; */
         float: right;
     }
-
-
     .braintree-sheet__content.braintree-sheet__content--form {
         display: flex;
         flex-direction: row;
@@ -76,8 +64,6 @@ $SiNi_admin_id = "Shopping";
         align-content: center;
         justify-content: center;
     }
-
-
 </style>
 
 
@@ -87,20 +73,15 @@ $SiNi_admin_id = "Shopping";
 
 <style>
     .jumbotron_dash{background: url("/images/Users_Dashboard.jpg") no-repeat center left /cover;}
-
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         /* display: none; <- Crashes Chrome on hover */
         -webkit-appearance: none;
         margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-
     }
-
-
     .bootstrap-basic {
         background: white;
     }
-
     /* Braintree Hosted Fields styling classes*/
     .braintree-hosted-fields {
         color: #495057;
@@ -113,7 +94,6 @@ $SiNi_admin_id = "Shopping";
         border: 1px solid #707282;
         height: calc(1.8125rem + 2px);
     }
-
     .braintree-hosted-fields-focused {
         outline: 0;
         height: 20px;
@@ -123,14 +103,12 @@ $SiNi_admin_id = "Shopping";
         background-color: #45464e;
         border: 1px solid #707282;
     }
-
     .braintree-hosted-fields-focused.is-invalid {
         background-color: #fff;
         border-color: red;
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         height: calc(1.8125rem + 8px);
     }
-
     #cc-expiration{
         border-radius: 2px;
         background-color: #383a44;
@@ -141,22 +119,18 @@ $SiNi_admin_id = "Shopping";
         font-size: .875rem;
         line-height: 1.5;
     }
-
     #cc-expiration.braintree-hosted-fields-focused {
         color: #fff;
         font-size: 33px;
         background-color: #45464e;
         border: 1px solid #707282;
     }
-
     #cc-expiration.braintree-hosted-fields-invalid {
         border-color: #dc3545;
     }
-
     #cc-expiration.braintree-hosted-fields-valid {
         border-color: #28a745;
     }
-
     #cc-cvv{
         border-radius: 2px;
         background-color: #383a44;
@@ -167,7 +141,6 @@ $SiNi_admin_id = "Shopping";
         font-size: .875rem;
         line-height: 1.5;
     }
-
     #cc-cvv.braintree-hosted-fields-focused {
         /*border-color: #777;*/
         color: #fff;
@@ -175,15 +148,12 @@ $SiNi_admin_id = "Shopping";
         background-color: #45464e;
         border: 1px solid #707282;
     }
-
     #cc-cvv.braintree-hosted-fields-invalid {
         border-color: #dc3545;
     }
-
     #cc-cvv.braintree-hosted-fields-valid {
         border-color: #28a745;
     }
-
     #postal-code{
         border-radius: 2px;
         background-color: #383a44;
@@ -194,7 +164,6 @@ $SiNi_admin_id = "Shopping";
         font-size: 16px;
         line-height: 1.5;
     }
-
     #postal-code.braintree-hosted-fields-focused {
         /*border-color: #777;*/
         color: #fff;
@@ -202,17 +171,14 @@ $SiNi_admin_id = "Shopping";
         background-color: #45464e;
         border: 1px solid #707282;
     }
-
     #postal-code.braintree-hosted-fields-invalid {
         border-color: #dc3545;
         border: 1px solid #dc3545;
     }
-
     #postal-code.braintree-hosted-fields-valid {
         border-color: #28a745;
         border: 1px solid #28a745;
     }
-
     #cc-number {
         border-radius: 2px;
         background-color: #383a44;
@@ -223,7 +189,6 @@ $SiNi_admin_id = "Shopping";
         font-size: .875rem;
         line-height: 1.5;
     }
-
     #cc-number.braintree-hosted-fields-focused {
         /*border-color: #777;*/
         color: #fff;
@@ -231,26 +196,20 @@ $SiNi_admin_id = "Shopping";
         background-color: #45464e;
         border: 1px solid #707282;
     }
-
     #cc-number.braintree-hosted-fields-invalid,  {
         border-color: #dc3545;
     }
-
     #cc-number.braintree-hosted-fields-valid {
         border-color: #28a745;
     }
-
     input:-internal-autofill-selected {
         background-color: #45464e !important;
         background-image: none !important;
         color: #fff !important;
     }
-
     .custom-select.is-invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .was-validated .form-control:invalid {
         border-color: #707282;
     }
-
-
 </style>
 
 </head>
@@ -790,14 +749,12 @@ $SiNi_admin_id = "Shopping";
     var cost_amount = document.getElementById("amount").value;
     var DoIChargeVat = '{{ $DoIChargeVat }}';
     var DoIHaveVatNumber = '{{$ThisUser->vat_number}}';
-
     var Form_Discount = 0;
     var Form_DiscountCode = 0;
     var Form_VatNumber = 0;
     var Form_Vat = 0;
     var Form_TotalAmount = 0;
     var Form_Amount = 0;
-
     braintree.client.create({
         authorization: '{{ $token }}'
     }, function (clientErr, clientInstance) {
@@ -818,7 +775,6 @@ $SiNi_admin_id = "Shopping";
             var deviceData = dataCollectorInstance.deviceData;
             document.getElementById("dataCollector").value = deviceData;
         });
-
         braintree.hostedFields.create({
                 client: clientInstance,
                 styles: {
@@ -870,13 +826,11 @@ $SiNi_admin_id = "Shopping";
                     console.error(err);
                     return;
                 }
-
                 function createInputChangeEventListener(element) {
                     return function () {
                         validateInput(element);
                     }
                 }
-
                 function setValidityClasses(element, validity) {
                     if (validity) {
                         element.removeClass('is-invalid');
@@ -887,7 +841,6 @@ $SiNi_admin_id = "Shopping";
                         element.removeClass('is-valid');
                     }
                 }
-
                 function validateInput(element) {
                     if (!element.val().trim()) {
                         setValidityClasses(element, false);
@@ -896,38 +849,29 @@ $SiNi_admin_id = "Shopping";
                     setValidityClasses(element, true);
                     return true;
                 }
-
                 function validateEmail () {
                     var baseValidity = validateInput(email);
-
                     if (!baseValidity) {
                         return false;
                     }
-
                     if (email.val().indexOf('@') === -1) {
                         setValidityClasses(email, false);
                         return false;
                     }
-
                     setValidityClasses(email, true);
                     return true;
                 }
                 var ccName = $('#cc-name');
                 var email = $('#email');
-
                 ccName.on('change', function () {
                     validateInput(ccName);
                 });
-
                 email.on('change', validateEmail);
-
                 hostedFieldsInstance.on('validityChange', function(event) {
                     var field = event.fields[event.emittedBy];
-
                     // Remove any previously applied error or warning classes
                     $(field.container).removeClass('is-valid');
                     $(field.container).removeClass('is-invalid');
-
                     if (field.isValid) {
                         $(field.container).addClass('is-valid');
                     }
@@ -939,40 +883,32 @@ $SiNi_admin_id = "Shopping";
                         $(field.container).addClass('is-invalid');
                     }
                 });
-
                 form.addEventListener('submit', function (event) {
                     event.preventDefault();
-
                     var formIsInvalid = false;
                     var state = hostedFieldsInstance.getState();
-
                     if (!validateInput($('#cc-name'))) {
                         formIsInvalid = true;
                     }
-
                     Object.keys(state.fields).forEach(function(field) {
                         if (!state.fields[field].isValid) {
                             $(state.fields[field].container).addClass('is-invalid');
                             formIsInvalid = true;
                         }
                     });
-
                     if (formIsInvalid) {
                         $.Notification.notify('error','top right', 'SiNi Software', 'Reqired Fiulds Are Missing In Your Form');
                         return;
                     }
-
                     hostedFieldsInstance.tokenize({
                             cardholderName: $('#cc-name').val()
                         },
                         function (tokenizeErr, payload) {
-
                             if (tokenizeErr) {
                                 $.Notification.notify('error','top right', 'SiNi Software', 'Reqired Fiulds Are Missing In Your Form');
                                 //console.error(tokenizeErr);
                                 return;
                             }
-
                             // If this was a real integration, this is where you would
                             // send the nonce to your server.
                             // console.log('Got a nonce: ' + payload.nonce);
@@ -989,7 +925,6 @@ $SiNi_admin_id = "Shopping";
         braintree.paypalCheckout.create({
             client: clientInstance
         }, function (paypalCheckoutErr, paypalCheckoutInstance) {
-
             if (paypalCheckoutErr) {
                 document.getElementById("paypal_button_bad_message").style.display = "block";
                 //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
@@ -997,7 +932,6 @@ $SiNi_admin_id = "Shopping";
                 //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
                 return;
             }
-
             // Set up PayPal with the checkout.js library
             paypal.Button.render({
                 env: 'production', // 'production' Or 'sandbox'
@@ -1024,7 +958,6 @@ $SiNi_admin_id = "Shopping";
                         */
                     });
                 },
-
                 onAuthorize: function (data, actions) {
                     return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
                         // Submit `payload.nonce` to your server
@@ -1036,13 +969,11 @@ $SiNi_admin_id = "Shopping";
                         form.submit();
                     });
                 },
-
                 onCancel: function (data) {
                     console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
                     document.getElementById('paypal-button').style.visibility = 'visible';
                     $.Notification.notify('error','top right', 'SiNi Software', 'PayPal payment cancelled');
                 },
-
                 onError: function (err) {
                     document.getElementById("paypal_button_bad_message").style.visibility = "visible";
                     document.getElementById("paypal_button_bad_message").style.display = "block";
@@ -1053,7 +984,6 @@ $SiNi_admin_id = "Shopping";
             });
         });
     });
-
     //////   my stuff
     var ThwVatNumber = false;
     var GodeDiscountPercent = 0;
@@ -1067,15 +997,12 @@ $SiNi_admin_id = "Shopping";
     var PR_M = <?php echo $PR_Price->price_month; ?>;
     var DE_Y = <?php echo $DE_Price->price_year; ?>;
     var DE_M = <?php echo $DE_Price->price_month; ?>;
-
     var Total = 0;
-
     function RunMath() {
         var AboveDiscount = "NO";
         var FullYearDiscount = "NO";
         var UserDiscount = 0;
         var UserDiscountAmount = 0;
-
         var AA_Y_C = document.getElementById("AA_Year").value;
         var IG_Y_C = document.getElementById("IG_Year").value;
         var SI_Y_C = document.getElementById("SI_Year").value;
@@ -1086,17 +1013,14 @@ $SiNi_admin_id = "Shopping";
         var SI_M_C = document.getElementById("SI_Month").value;
         var PR_M_C = document.getElementById("PR_Month").value;
         var DE_M_C = document.getElementById("DE_Month").value;
-
         var UserAmount_Y = Number(AA_Y_C) + Number(IG_Y_C) + Number(SI_Y_C) + Number(PR_Y_C) + Number(DE_Y_C);
         var UserAmount_M = Number(AA_M_C) + Number(IG_M_C) + Number(SI_M_C) + Number(PR_M_C) + Number(DE_M_C);
-
         if(UserAmount_Y > 4 && UserAmount_Y < 11){
             document.getElementById("DiscountShow").innerHTML = '5% Off Price';
             document.getElementById('DiscountShow').style.visibility = 'visible';
             FullYearDiscount = "YES";
             UserDiscount = 5;
         }
-
         if(UserAmount_Y > 10 && UserAmount_Y < 100000){
             document.getElementById("DiscountShow").innerHTML = '10% Off Price';
             document.getElementById('DiscountShow').style.visibility = 'visible';
@@ -1104,7 +1028,6 @@ $SiNi_admin_id = "Shopping";
             UserDiscount = 10;
         }
         if(UserAmount_Y > 10 && UserAmount_Y < 100000){
-
         }
         else{
             if(UserAmount_M > 4 && UserAmount_M < 11){
@@ -1113,17 +1036,14 @@ $SiNi_admin_id = "Shopping";
                 UserDiscount = 5;
             }
         }
-
         if(UserAmount_M > 10 && UserAmount_M < 100000){
             document.getElementById("DiscountShow").innerHTML = '10% Off Price';
             document.getElementById('DiscountShow').style.visibility = 'visible';
             UserDiscount = 10;
         }
-
         if(UserAmount_M < 5 && UserAmount_Y < 5){
             document.getElementById('DiscountShow').style.visibility = 'hidden';
         }
-
         var AA_Y_V = AA_Y * AA_Y_C;
         var IG_Y_V = IG_Y * IG_Y_C;
         var SI_Y_V = SI_Y * SI_Y_C;
@@ -1134,22 +1054,18 @@ $SiNi_admin_id = "Shopping";
         var SI_M_V = SI_M * SI_M_C;
         var PR_M_V = PR_M * PR_M_C;
         var DE_M_V = DE_M * DE_M_C;
-
         var SubTotal = AA_Y_V + IG_Y_V + SI_Y_V + PR_Y_V + DE_Y_V + AA_M_V + IG_M_V + SI_M_V + PR_M_V + DE_M_V;
         var DiscountAmount = 0;
         var DiscountTotal = SubTotal;
-
         if(GodeDiscountPercent > 0){
             DiscountAmount = (GodeDiscountPercent / 100) * SubTotal;
             DiscountTotal = DiscountTotal - DiscountAmount;
         }
-
         if(UserDiscount > 0){
             UserDiscountAmount = (UserDiscount / 100) * SubTotal;
             DiscountAmount = DiscountAmount + UserDiscountAmount;
             DiscountTotal = DiscountTotal - UserDiscountAmount;
         }
-
         /// 0 = no     1 = only if no vat number      2 = yes
         if(DoIChargeVat == 1){
             var Vat = (20 / 100) * DiscountTotal;
@@ -1160,32 +1076,25 @@ $SiNi_admin_id = "Shopping";
         else{
             Vat = 0;
         }
-
         if(DoIChargeVat == 2){
             var Vat = (20 / 100) * DiscountTotal;
         }
-
         Total = Vat + DiscountTotal;
-
         var TotalDiscountAmount = GodeDiscountPercent + UserDiscount;
         document.getElementById("Form_Discount_Percent").value = TotalDiscountAmount;
         document.getElementById("Form_Discount").value = DiscountTotal.toFixed(2);
         document.getElementById("Form_Vat").value = Vat.toFixed(2);
         document.getElementById("Form_TotalAmount").value = Total.toFixed(2);
         document.getElementById("Form_Amount").value = SubTotal.toFixed(2);
-
         document.getElementById("Total").value = ("£" + SubTotal.toFixed(2));
         document.getElementById("DiscountTotal").value = ("£" + DiscountAmount.toFixed(2));
         document.getElementById("Total_Discount").value = ("£" + DiscountTotal.toFixed(2));
         //if(DoIChargeVat > 0){
         document.getElementById("Vat").value = ("£" + Vat.toFixed(2));
         //}
-
         document.getElementById("VatTotal").value = ("£" + Total.toFixed(2));
         document.getElementById("amount").value = Total.toFixed(2);
         document.getElementById("CC_Price2").value = Total.toFixed(2);
-
-
         document.getElementById("CC_AA_Year").value = AA_Y_C;
         document.getElementById("CC_IG_Year").value = IG_Y_C;
         document.getElementById("CC_SI_Year").value = SI_Y_C;
@@ -1196,7 +1105,6 @@ $SiNi_admin_id = "Shopping";
         document.getElementById("CC_SI_Month").value = SI_M_C;
         document.getElementById("CC_DE_Month").value = DE_M_C;
         document.getElementById("CC_PR_Month").value = PR_M_C;
-
         if(document.getElementById("amount").value  > 0){
             document.getElementById("paypal-button").style.display = "block";
             document.getElementById("submit-button").style.display = "block";
@@ -1206,10 +1114,8 @@ $SiNi_admin_id = "Shopping";
             document.getElementById("submit-button").style.display = "none";
         }
     }
-
     function GetDiscount() {
         var discount_imput = document.getElementById("Discount").value;
-
         var form_data = new FormData();
         form_data.append('code', discount_imput);
         $.ajaxSetup({
@@ -1229,7 +1135,6 @@ $SiNi_admin_id = "Shopping";
                 if(data.result == "true"){
                     document.getElementById("Discount").style.borderColor = "#45464e";
                     document.getElementById("Discount").style.backgroundColor = "#2f323b";
-
                     document.getElementById("Discount").disabled = true;
                     $( ".Discount2" ).empty();
                     document.getElementById('DiscNumberButton').style.visibility = 'hidden';
@@ -1240,7 +1145,6 @@ $SiNi_admin_id = "Shopping";
                     //document.getElementById("CC_Discount").value = discount_imput;
                     document.getElementById("Form_DiscountCode").value = document.getElementById("Discount").value;
                     RunMath();
-
                 }
                 else{
                     document.getElementById("Discount").style.borderColor = "red";
@@ -1254,10 +1158,8 @@ $SiNi_admin_id = "Shopping";
             }
         });
     }
-
     function GetVat() {
         var vat_number = document.getElementById("VatNumber").value;
-
         $.ajax({
             url: 'https://apilayer.net/api/validate?access_key=adb03562fee81f072f86164a79cb72fa&vat_number=' + vat_number,
             dataType: 'jsonp',
@@ -1284,19 +1186,15 @@ $SiNi_admin_id = "Shopping";
             }
         });
     }
-
     if(DoIHaveVatNumber != ''){
         document.getElementById("VatNumber").disabled = true;
         document.getElementById("Form_VatNumber").value = DoIHaveVatNumber;
         ThwVatNumber = true;
         RunMath();
     }
-
     $('table tr td').on('input',function(e){
         RunMath();
     });
-
-
 </script>
 
 
