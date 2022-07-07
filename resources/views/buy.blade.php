@@ -454,7 +454,7 @@ $SiNi_admin_id = "Shopping";
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <div class="input-group pay-group">
+                                                    <div id="submit_cc_sini" class="input-group pay-group" style="display: none;">
                                                         <input disabled id="pay-btn" style="width: 100%;" class="btn btn-sini" type="submit" value="Loading...">
                                                     </div>
                                                 </div>
@@ -489,7 +489,7 @@ $SiNi_admin_id = "Shopping";
                                         </div>
                                         <div class="row" style="padding-top: 20px;">
                                             <div class="col-md-6  hidden">
-                                                <p class="lead sdfsdf">Payment method nonce received:</p>
+                                                <p class="input-group-addon lead">Payment method nonce received:</p>
                                                 <div class="input-group nonce-group hidden">
                                                     <input readonly name="nonce" class="form-control">
                                                 </div>
@@ -529,6 +529,10 @@ $SiNi_admin_id = "Shopping";
                                     <div class="row">
                                         <div class="col-md-12" style="padding-bottom: 20px;">
                                             PAY PAL HERE
+                                            <input type="text" class="form-control" id="CC_Price2" name="CC_Price2" readonly="">
+                                        </div>
+                                        <div class="col-md-6" style="padding-top: 30px;">
+                                            <div style="display: none;" id="paypal-button"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -1206,11 +1210,11 @@ start();
 
         if(document.getElementById("amount").value  > 0){
             document.getElementById("paypal-button").style.display = "block";
-            document.getElementById("submit-button").style.display = "block";
+            document.getElementById("submit_cc_sini").style.display = "block";
         }
         else{
             document.getElementById("paypal-button").style.display = "none";
-            document.getElementById("submit-button").style.display = "none";
+            document.getElementById("submit_cc_sini").style.display = "none";
         }
     }
 
