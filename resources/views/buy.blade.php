@@ -669,10 +669,26 @@ function setupComponents (clientToken) {
     braintree.hostedFields.create({
       authorization: '{{ $token }}',
       styles: {
-        input: {
-          'font-size': '14px',
-          'font-family': 'monospace'
-        }
+        'input': {
+            'font-size': '16px',
+            'padding': '9px',
+        },
+        // Styling element state
+        ':focus': {
+          'color': '#fff',
+        },
+        '.valid': {
+          'color': '#28a745',
+          'border-color': '#28a745',
+          'border-style': 'solid',
+          'border-width': 'thin',
+        },
+        '.invalid': {
+          'color': '#dc3545',
+          'border-color': '#dc3545',
+          'border-style': 'solid',
+          'border-width': 'thin',
+        },
       },
       fields: {
         number: {
@@ -743,7 +759,7 @@ payBtn.addEventListener('click', function(event) {
       onLookupComplete: function (data, next) {
         next();
       },
-      amount: '100.00',
+      amount: Form_TotalAmount,
       nonce: payload.nonce,
       bin: payload.details.bin,
       email: billingFields.email.input.value,
@@ -768,6 +784,8 @@ payBtn.addEventListener('click', function(event) {
     console.log('verification success:', payload);
     showNonce(payload, true);
       // send nonce and verification data to your server
+      $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
+      alert(payload);
   }).catch(function (err) {
     console.log(err);
     enablePayNow();
