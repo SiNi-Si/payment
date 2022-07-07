@@ -5,251 +5,18 @@ $SiNi_admin_id = "Shopping";
 @include ('includes.top')
 <title>SiNi Software | User Buy Software</title>
 
-<script src="https://js.braintreegateway.com/web/dropin/1.33.2/js/dropin.min.js"></script>
-{{--<script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>--}}
-<script src="https://js.braintreegateway.com/web/3.60.0/js/client.min.js"></script>
-{{--<script src="https://js.braintreegateway.com/web/3.60.0/js/paypal-checkout.min.js"></script>--}}
-{{--<script src="https://js.braintreegateway.com/web/3.60.0/js/hosted-fields.min.js"></script>--}}
-{{--<script src="https://js.braintreegateway.com/web/3.60.0/js/data-collector.min.js"></script>--}}
+<!-- Load the client component. -->
+<script src='https://js.braintreegateway.com/web/3.85.3/js/client.min.js'></script>
+
+<!-- Load the 3D Secure component. -->
+<script src='https://js.braintreegateway.com/web/3.85.3/js/three-d-secure.min.js'></script>
+
+<!-- Load the Hosted Fields component. -->
+<script src='https://js.braintreegateway.com/web/3.85.3/js/hosted-fields.min.js'></script>
 
 
 <style>
-
-    .braintree-sheet__header {
-        display: none;
-    }
-
-    .braintree-sheet__content.braintree-sheet__content--form {
-        display: flex;
-    }
-    .braintree-form-number.braintree-form__hosted-field  {
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 8px);
-        padding: 0.25rem 0.5rem;
-        font-size: .875rem;
-        line-height: 1.5;
-    }
-
-    .braintree-form__hosted-field.braintree-form-expiration {
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 8px);
-        padding: 0.25rem 0.5rem;
-        font-size: .875rem;
-        line-height: 1.5;
-
-    }
-
-    .braintree-card.braintree-form.braintree-sheet {
-        background-color: #3a3c46;
-        border: none;
-    }
-
-    .braintree-sheet__content--form .braintree-form__field-group .braintree-form__label {
-        color: #949ba2;
-        display: block;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 1.4;
-        margin: 0;
-        padding: 0;
-        text-align: left;
-    }
-
-    .braintree-form-number.braintree-form__hosted-field {
-        width: 100%;
-        margin-left: 393px;
-        /* padding: 0px; */
-        float: right;
-    }
-
-
-    .braintree-sheet__content.braintree-sheet__content--form {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-content: center;
-        justify-content: center;
-    }
-
-
-</style>
-
-
-
-
-
-
-<style>
-    .jumbotron_dash{background: url("/images/Users_Dashboard.jpg") no-repeat center left /cover;}
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        /* display: none; <- Crashes Chrome on hover */
-        -webkit-appearance: none;
-        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-
-    }
-
-
-    .bootstrap-basic {
-        background: white;
-    }
-
-    /* Braintree Hosted Fields styling classes*/
-    .braintree-hosted-fields {
-        color: #495057;
-        background-color: #fff;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 2px);
-    }
-
-    .braintree-hosted-fields-focused {
-        outline: 0;
-        height: 20px;
-        height: calc(1.8125rem + 8px);
-        color: #fff;
-        font-size: 33px;
-        background-color: #45464e;
-        border: 1px solid #707282;
-    }
-
-    .braintree-hosted-fields-focused.is-invalid {
-        background-color: #fff;
-        border-color: red;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-        height: calc(1.8125rem + 8px);
-    }
-
-    #cc-expiration{
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 8px);
-        padding: .25rem .5rem;
-        font-size: .875rem;
-        line-height: 1.5;
-    }
-
-    #cc-expiration.braintree-hosted-fields-focused {
-        color: #fff;
-        font-size: 33px;
-        background-color: #45464e;
-        border: 1px solid #707282;
-    }
-
-    #cc-expiration.braintree-hosted-fields-invalid {
-        border-color: #dc3545;
-    }
-
-    #cc-expiration.braintree-hosted-fields-valid {
-        border-color: #28a745;
-    }
-
-    #cc-cvv{
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 8px);
-        padding: .25rem .5rem;
-        font-size: .875rem;
-        line-height: 1.5;
-    }
-
-    #cc-cvv.braintree-hosted-fields-focused {
-        /*border-color: #777;*/
-        color: #fff;
-        font-size: 33px;
-        background-color: #45464e;
-        border: 1px solid #707282;
-    }
-
-    #cc-cvv.braintree-hosted-fields-invalid {
-        border-color: #dc3545;
-    }
-
-    #cc-cvv.braintree-hosted-fields-valid {
-        border-color: #28a745;
-    }
-
-    #postal-code{
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 8px);
-        padding: .25rem .5rem;
-        font-size: 16px;
-        line-height: 1.5;
-    }
-
-    #postal-code.braintree-hosted-fields-focused {
-        /*border-color: #777;*/
-        color: #fff;
-        font-size: 33px;
-        background-color: #45464e;
-        border: 1px solid #707282;
-    }
-
-    #postal-code.braintree-hosted-fields-invalid {
-        border-color: #dc3545;
-        border: 1px solid #dc3545;
-    }
-
-    #postal-code.braintree-hosted-fields-valid {
-        border-color: #28a745;
-        border: 1px solid #28a745;
-    }
-
-    #cc-number {
-        border-radius: 2px;
-        background-color: #383a44;
-        color: #989898;
-        border: 1px solid #707282;
-        height: calc(1.8125rem + 8px);
-        padding: .25rem .5rem;
-        font-size: .875rem;
-        line-height: 1.5;
-    }
-
-    #cc-number.braintree-hosted-fields-focused {
-        /*border-color: #777;*/
-        color: #fff;
-        font-size: 33px;
-        background-color: #45464e;
-        border: 1px solid #707282;
-    }
-
-    #cc-number.braintree-hosted-fields-invalid,  {
-        border-color: #dc3545;
-    }
-
-    #cc-number.braintree-hosted-fields-valid {
-        border-color: #28a745;
-    }
-
-    input:-internal-autofill-selected {
-        background-color: #45464e !important;
-        background-image: none !important;
-        color: #fff !important;
-    }
-
-    .custom-select.is-invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .was-validated .form-control:invalid {
-        border-color: #707282;
-    }
-
+.jumbotron_dash{background: url("/images/Users_Dashboard.jpg") no-repeat center left /cover;}
 
 </style>
 
@@ -558,103 +325,141 @@ $SiNi_admin_id = "Shopping";
                         <div class="tab-pane fade show active" id="SiNi_Card">
                             <div class="card">
                                 <div class="card-body" style="padding: 30px; min-height: 280px;">
-                                    <div class="row">
-                                        <div class="col-md-12" style="padding-bottom: 20px;">
-                                            <h4>SiNi Software does not store any credit card information on our server.  We use a secure payment system call <a href="https://www.braintreepayments.com/" target="_blank">BrainTree</a> owned by paypal.</h4>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    @if (session()->has('success_message'))
-                                        <div class="alert alert-success">
-                                            {{ session()->get('success_message') }}
-                                        </div>
-                                    @endif
 
-                                    @if(count($errors) > 0)
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                    <form action="{{ url('/User/Buy/Purchase') }}" method="POST" id="payment-form">
-                                        @csrf
+                                    
+                                    <form action="javascript:void(0)" class="container">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="cc_name">Name On Credit Card</label>
-                                                    <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="Name on your credit card">
-                                                    <div class="invalid-feedback">
-                                                        Please enter your full name as displayed on card
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label for="postal-code">Credit Card Post Code</label>
-                                                    <div class="form-control" id="postal-code">
-                                                    </div>
-                                                    <div class="invalid-feedback">
-                                                        Please enter post code
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="their_email">User Associated With Payment</label>
-                                                    <input type="text" class="form-control" id="email" value="{{$ThisUser->email}}" name="their_email" readonly="">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label for="amount">Total Amount</label>
-                                                    <input type="text" class="form-control" id="amount" name="amount" readonly="">
-                                                </div>
+                                            <div class="col-xs-12">
+                                                <p class="lead">This is a functional example of performing 3D Secure verification on a credit card tokenized with Hosted Fields. For 3DS 2.0, it's highly recomended to supply additional information about the customer to achieve a frictionless flow (no challenge presented).</p>
                                             </div>
                                         </div>
-
                                         <div class="row">
-                                            <div class="col-md-12">
-
-                                                    <div class="bt-drop-in-wrapper">
-                                                        <div id="bt-dropin"></div>
-                                                    </div>
-                                                    <input id="nonce" name="payment_method_nonce" type="hidden" />
+                                            <div class="col-xs-12">
+                                                <p>For this demo, you may populate the fields with fake customer information.</p>
+                                                <button class="btn btn-warning" id="autofill">Autofill Customer Information</button>
                                             </div>
                                         </div>
-
-
+                                      
                                         <div class="row">
-                                            <div class="col-md-2" style="height: 50px;">
-                                                <input type="hidden" value="0" name="Form_Discount" id="Form_Discount" />
-                                                <input type="hidden" value="0" name="Form_Discount_Percent" id="Form_Discount_Percent" />
-                                                <input type="hidden" value="0" name="Form_DiscountCode" id="Form_DiscountCode" />
-                                                <input type="hidden" value="0" name="Form_VatNumber" id="Form_VatNumber" />
-                                                <input type="hidden" value="0" name="Form_Vat" id="Form_Vat" />
-                                                <input type="hidden" value="0" name="Form_TotalAmount" id="Form_TotalAmount" />
-                                                <input type="hidden" value="0" name="Form_Amount" id="Form_Amount" />
-                                                <input type="hidden" value="0" name="AA_Year" id="CC_AA_Year" />
-                                                <input type="hidden" value="0" name="IG_Year" id="CC_IG_Year" />
-                                                <input type="hidden" value="0" name="SI_Year" id="CC_SI_Year" />
-                                                <input type="hidden" value="0" name="DE_Year" id="CC_DE_Year" />
-                                                <input type="hidden" value="0" name="PR_Year" id="CC_PR_Year" />
-                                                <input type="hidden" value="0" name="AA_Month" id="CC_AA_Month" />
-                                                <input type="hidden" value="0" name="IG_Month" id="CC_IG_Month" />
-                                                <input type="hidden" value="0" name="SI_Month" id="CC_SI_Month" />
-                                                <input type="hidden" value="0" name="DE_Month" id="CC_DE_Month" />
-                                                <input type="hidden" value="0" name="PR_Month" id="CC_PR_Month" />
-                                                <input type="hidden" value="0" name="dataCollector" id="dataCollector" />
-                                                <input type="hidden" value="{{$ThisUser->id}}" name="user_id" id="user_id" />
-                                            </div>
-                                            <div class="col-md-5">
-                                                <!---- <div style="display: none;" id="paypal-button"></div>--->
-                                            </div>
-                                            <div class="col-md-5" style="padding-top: 20px;">
-                                                <button id="submit-button" type="submit" class="btn btn-sm btn-sini pad4">Submit Payment To SiNi Software</button>
+                                            <div class="col-xs-12" >
+                                                <div class="form-group">
+                                                    <label for="email">Email address</label>
+                                                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                                                    <span id="help-email" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-phone">Billing phone number</label>
+                                                    <input type="billing-phone" class="form-control" id="billing-phone" placeholder="123-456-7890">
+                                                    <span id="help-billing-phone" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-given-name">Billing given name</label>
+                                                    <input type="billing-given-name" class="form-control" id="billing-given-name" placeholder="First">
+                                                    <span id="help-billing-given-name" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-surname">Billing surname</label>
+                                                    <input type="billing-surname" class="form-control" id="billing-surname" placeholder="Last">
+                                                    <span id="help-billing-surname" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-street-address">Billing street address</label>
+                                                    <input type="billing-street-address" class="form-control" id="billing-street-address" placeholder="123 Street">
+                                                    <span id="help-billing-street-address" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-extended-address">Billing extended address</label>
+                                                    <input type="billing-extended-address" class="form-control" id="billing-extended-address" placeholder="Unit 1">
+                                                    <span id="help-billing-extended-address" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-locality">Billing locality</label>
+                                                    <input type="billing-locality" class="form-control" id="billing-locality" placeholder="City">
+                                                    <span id="help-billing-locality" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-region">Billing region</label>
+                                                    <input type="billing-region" class="form-control" id="billing-region" placeholder="State">
+                                                    <span id="help-billing-region" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-postal-code">Billing postal code</label>
+                                                    <input type="billing-postal-code" class="form-control" id="billing-postal-code" placeholder="12345">
+                                                    <span id="help-billing-postal-code" class="help-block"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="billing-country-code">Billing country code (Alpha 2)</label>
+                                                    <input type="billing-country-code" class="form-control" id="billing-country-code" placeholder="XX">
+                                                    <span id="help-billing-country-code" class="help-block"></span>
+                                                </div>
                                             </div>
                                         </div>
+                                      
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <table class="table">
+                                                    <tr><th>Field</th><th>Value</th></tr>
+                                                    <tr><td>Number (successful with no challenge)</td><td>4000000000001000</td></tr>
+                                                    <tr><td>Number (successful with challenge)</td><td>4000000000001091</td></tr>
+                                                            <tr><td>Number (unsuccessful with challenge)</td><td>4000000000001109</td></tr>
+                                                    <tr><td>Expiration Date (for sandbox testing, year must be exactly 3 years in the future)</td><td>12/22</td></tr>
+                                                    <tr><td>CVV</td><td>123</td></tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="col-xs-12 nonce-group hidden">
+                                            <p class="lead"> Payment method nonce received: </p>
+                                            <div class="input-group">
+                                                <span class="input-group-addon lead"></span>
+                                                <input readonly name="nonce" class="form-control">
+                                            </div>
+                                            <br>
+                                            <p class="lead"> Reload the codepen to try another card. </p>
+                                            <br>
+                                        </div>
+
+                                        <div id="hosted-fields">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-credit-card"></span></span>
+                                                        <div id="hf-number" class="form-control"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                        <div id="hf-date" class="form-control"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                                        <div id="hf-cvv" class="form-control"></div>
+                                                        <span class="input-group-addon">CVV</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="input-group nonce-group hidden">
+                                                    <span class="input-group-addon">nonce</span>
+                                                    <input readonly name="nonce" class="form-control">
+                                                </div>
+                                          
+                                                <br />
+                                          
+                                                <div class="input-group pay-group">
+                                                    <input disabled id="pay-btn" class="btn btn-success" type="submit" value="Loading...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -663,78 +468,9 @@ $SiNi_admin_id = "Shopping";
                                 <div class="card-body" style="padding: 30px; min-height: 340px;">
                                     <div class="row">
                                         <div class="col-md-12" style="padding-bottom: 20px;">
-                                            <h4>SiNi Software Checkout with <a href="https://www.paypal.com/" target="_blank">PayPal</a> is an easy way for customers pay.  You will not need to update your expired credit cards with us.</h4>
-                                            <hr>
+                                            PAY PAL HERE
                                         </div>
                                     </div>
-                                    @if (session()->has('success_message'))
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="alert alert-success">
-                                                    {{ session()->get('success_message') }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    @if(count($errors) > 0)
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="alert alert-danger">
-                                                    <ul>
-                                                        @foreach ($errors->all() as $error)
-                                                            <li><{{ $error }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="alert alert-danger" style="display: none;" id="paypal_button_bad_message">
-                                                        Error Connection To PayPal - Please Contact SiNi Software Support.
-                                                    </div>
-                                                    <div class="alert alert-success" style="display: none;" id="paypal_button_good_message">
-                                                        Please wait, and don't reload page.  We are prossessing your order now.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="their_email">User Associated With Payment</label>
-                                                <input type="text" class="form-control" value="{{$ThisUser->email}}" name="their_email" readonly="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label for="amount">Amount</label>
-                                                <input type="text" class="form-control" id="CC_Price2" name="CC_Price2" readonly="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-
-                                        </div>
-                                        <div class="col-md-4" style="height: 50px;">
-                                            Checking out with PayPal will open the PayPal window to login to your account.
-                                        </div>
-                                        <div class="col-md-6" style="padding-top: 30px;">
-                                            <div style="display: none;" id="paypal-button"></div>
-                                        </div>
-                                    </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -757,6 +493,219 @@ $SiNi_admin_id = "Shopping";
 
 
 <script>
+var hf, threeDS;
+var hostedFieldsContainer = document.getElementById('hosted-fields');
+var payBtn = document.getElementById('pay-btn');
+var nonceGroup = document.querySelector('.nonce-group');
+var nonceInput = document.querySelector('.nonce-group input');
+var nonceSpan = document.querySelector('.nonce-group span');
+var payGroup = document.querySelector('.pay-group');
+var billingFields = [
+  'email',
+  'billing-phone',
+  'billing-given-name',
+  'billing-surname',
+  'billing-street-address',
+  'billing-extended-address',
+  'billing-locality',
+  'billing-region',
+  'billing-postal-code',
+  'billing-country-code'
+].reduce(function (fields, fieldName) {
+  var field = fields[fieldName] = {
+    input: document.getElementById(fieldName),
+    help: document.getElementById('help-' + fieldName)
+  };
+  
+  field.input.addEventListener('focus', function() {
+    clearFieldValidations(field);
+  });
+
+  return fields;
+}, {});
+
+function autofill(e) {
+  e.preventDefault();
+
+  billingFields.email.input.value = 'your.email@email.com';
+  billingFields['billing-phone'].input.value = '123-456-7890';
+  billingFields['billing-given-name'].input.value = 'Jane';
+  billingFields['billing-surname'].input.value = 'Doe';
+  billingFields['billing-street-address'].input.value = '123 XYZ Street';
+  billingFields['billing-locality'].input.value = 'Anytown';
+  billingFields['billing-region'].input.value = 'CA';
+  billingFields['billing-postal-code'].input.value = '12345';
+  billingFields['billing-country-code'].input.value = 'US';
+  
+  Object.keys(billingFields).forEach(function (field) {
+    clearFieldValidations(billingFields[field]);
+  });
+}
+
+document.getElementById('autofill').addEventListener('click', autofill);
+
+function clearFieldValidations (field) {
+  field.help.innerText = '';
+  field.help.parentNode.classList.remove('has-error');
+}
+
+billingFields['billing-extended-address'].optional = true;
+
+function validateBillingFields() {
+  var isValid = true;
+
+  Object.keys(billingFields).forEach(function (fieldName) {
+    var fieldEmpty = false;
+    var field = billingFields[fieldName];
+
+    if (field.optional) {
+      return;
+    }
+
+    fieldEmpty = field.input.value.trim() === '';
+
+    if (fieldEmpty) {
+      isValid = false;
+      field.help.innerText = 'Field cannot be blank.';
+      field.help.parentNode.classList.add('has-error');
+    } else {
+      clearFieldValidations(field);
+    }
+  });
+
+  return isValid;
+}
+
+function start() {
+  getClientToken();
+}
+
+function getClientToken() {
+  var xhr = new XMLHttpRequest();
+  
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 201) {
+      onFetchClientToken(JSON.parse(xhr.responseText).client_token);  
+    }
+  };
+  xhr.open("GET", "https://braintree-sample-merchant.herokuapp.com/client_token", true);
+
+  xhr.send(); 
+}
+
+function setupComponents (clientToken) {
+  return Promise.all([
+    braintree.hostedFields.create({
+      authorization: clientToken,
+      styles: {
+        input: {
+          'font-size': '14px',
+          'font-family': 'monospace'
+        }
+      },
+      fields: {
+        number: {
+          selector: '#hf-number',
+          placeholder: '4111 1111 1111 1111'
+        },
+        cvv: {
+          selector: '#hf-cvv',
+          placeholder: '123'
+        },
+        expirationDate: {
+          selector: '#hf-date',
+          placeholder: '12 / 34'
+        }
+      }
+    }),
+    braintree.threeDSecure.create({
+      authorization: clientToken,
+      version: 2
+    })
+  ]);
+}
+
+function onFetchClientToken(clientToken) {
+  return setupComponents(clientToken).then(function(instances) { 
+    hf = instances[0];
+    threeDS = instances[1];
+
+    setupForm();
+  }).catch(function (err) {
+     console.log('component error:', err);
+  });
+}
+
+function setupForm() {
+  enablePayNow();
+}
+
+function enablePayNow() {
+  payBtn.value = 'Pay Now';
+  payBtn.removeAttribute('disabled');
+}
+
+function showNonce(payload, liabilityShift) {
+  nonceSpan.textContent = "Liability shifted: " + liabilityShift;
+  nonceInput.value = payload.nonce;
+  payGroup.classList.add('hidden');
+  hostedFieldsContainer.classList.add('hidden');
+  payGroup.style.display = 'none';
+  hostedFieldsContainer.style.display = 'none';
+  nonceGroup.classList.remove('hidden');
+}
+
+payBtn.addEventListener('click', function(event) {
+  payBtn.setAttribute('disabled', 'disabled');
+  payBtn.value = 'Processing...';
+  
+  var billingIsValid = validateBillingFields();
+  
+  if (!billingIsValid) {
+    enablePayNow();
+    
+    return;
+  }
+
+  hf.tokenize().then(function (payload) {
+    return threeDS.verifyCard({
+      onLookupComplete: function (data, next) {
+        next();
+      },
+      amount: '100.00',
+      nonce: payload.nonce,
+      bin: payload.details.bin,
+      email: billingFields.email.input.value,
+      billingAddress: {
+        givenName: billingFields['billing-given-name'].input.value,
+        surname: billingFields['billing-surname'].input.value,
+        phoneNumber: billingFields['billing-phone'].input.value.replace(/[\(\)\s\-]/g, ''), // remove (), spaces, and - from phone number
+        streetAddress: billingFields['billing-street-address'].input.value,
+        extendedAddress: billingFields['billing-extended-address'].input.value,
+        locality: billingFields['billing-locality'].input.value,
+        region: billingFields['billing-region'].input.value,
+        postalCode: billingFields['billing-postal-code'].input.value,
+        countryCodeAlpha2: billingFields['billing-country-code'].input.value
+      }
+    })
+  }).then(function (payload) {
+    if (!payload.liabilityShifted) {
+      console.log('Liability did not shift', payload);
+      showNonce(payload, false);
+      return;
+    }
+
+    console.log('verification success:', payload);
+    showNonce(payload, true);
+      // send nonce and verification data to your server
+  }).catch(function (err) {
+    console.log(err);
+    enablePayNow();
+  });
+});
+
+start();
+/* OLD CODE
     var form = document.querySelector('#payment-form');
     var client_token = "{{ $token }}";
     braintree.dropin.create({
@@ -780,11 +729,7 @@ $SiNi_admin_id = "Shopping";
             });
         });
     });
-</script>
 
-
-
-<script>
     var form = document.querySelector('#payment-form');
     var submit = document.querySelector('input[type="submit"]');
     var cost_amount = document.getElementById("amount").value;
@@ -1017,11 +962,7 @@ $SiNi_admin_id = "Shopping";
                         enableShippingAddress: false,
                         storeInVaultOnSuccess: true,
                         //storeInVault: true,
-                        /*
-                          'submitForSettlement' => true,
-                          'storeInVaultOnSuccess' => true,
-                          'storeInVault' => true,
-                        */
+
                     });
                 },
 
@@ -1053,7 +994,7 @@ $SiNi_admin_id = "Shopping";
             });
         });
     });
-
+*/
     //////   my stuff
     var ThwVatNumber = false;
     var GodeDiscountPercent = 0;
