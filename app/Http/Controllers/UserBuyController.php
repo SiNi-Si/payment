@@ -80,8 +80,72 @@ class UserBuyController extends Controller{
         return view('buy', compact('DoIChargeVat', 'SC_Price', 'ThisUser', 'AA_Price' ,'IG_Price', 'SI_Price', 'DE_Price', 'PR_Price', 'Total_Lic_AA', 'Total_Lic_IG', 'Total_Lic_PR', 'Total_Lic_SI', 'Total_Lic_DE', 'Total_Lic_SC', 'Free_Lic_AA', 'Free_Lic_IG', 'Free_Lic_PR', 'Free_Lic_SI', 'Free_Lic_DE', 'Free_Lic_SC', 'token'));
     }
 
-    public function cc_purchase(Request $request){
+    public function index_old(){
+        //$id = Auth::user()->id;
+        $id = '27862';
+        $ThisUser = User::where('id', $id)->first();
 
+        if($ThisUser->country == 'GB')
+            $DoIChargeVat = 2;
+        else
+            $DoIChargeVat = 1;
+
+        $AA_Price = Price::where('name', 'All Access')->first();
+        $IG_Price = Price::where('name', 'IgNite')->first();
+        $SI_Price = Price::where('name', 'SiClone')->first();
+        $DE_Price = Price::where('name', 'Disperse')->first();
+        $PR_Price = Price::where('name', 'ProxSi')->first();
+        $SC_Price = Price::where('name', 'Scatter')->first();
+
+        /*
+        $Total_Lic_AA = Licence_Users::where('user_id', $id)->where('active', 1)->sum('aa');
+        $Total_Lic_IG = Licence_Users::where('user_id', $id)->where('active', 1)->sum('ig');
+        $Total_Lic_PR = Licence_Users::where('user_id', $id)->where('active', 1)->sum('pr');
+        $Total_Lic_SI = Licence_Users::where('user_id', $id)->where('active', 1)->sum('si');
+        $Total_Lic_DE = Licence_Users::where('user_id', $id)->where('active', 1)->sum('de');
+        $Total_Lic_SC = Licence_Users::where('user_id', $id)->where('active', 1)->sum('sc');
+
+        $Free_Lic_AA = Licence_Users::where('user_id', $id)->where([['active', 1],['disc_id', 0]])->sum('aa');
+        $Free_Lic_IG = Licence_Users::where('user_id', $id)->where([['active', 1],['disc_id', 0]])->sum('ig');
+        $Free_Lic_PR = Licence_Users::where('user_id', $id)->where([['active', 1],['disc_id', 0]])->sum('pr');
+        $Free_Lic_SI = Licence_Users::where('user_id', $id)->where([['active', 1],['disc_id', 0]])->sum('si');
+        $Free_Lic_DE = Licence_Users::where('user_id', $id)->where([['active', 1],['disc_id', 0]])->sum('de');
+        $Free_Lic_SC = Licence_Users::where('user_id', $id)->where([['active', 1],['disc_id', 0]])->sum('sc');
+        */
+        /// Temp ------
+        $Total_Lic_AA = 0;
+        $Total_Lic_IG = 0;
+        $Total_Lic_PR = 0;
+        $Total_Lic_SI = 0;
+        $Total_Lic_DE = 0;
+        $Total_Lic_SC = 0;
+
+        $Free_Lic_AA = 0;
+        $Free_Lic_IG = 0;
+        $Free_Lic_PR = 0;
+        $Free_Lic_SI = 0;
+        $Free_Lic_DE = 0;
+        $Free_Lic_SC = 0;
+        /// Temp End ------
+
+
+        $gateway = new Braintree\Gateway([
+            'environment' => config('services.braintree.environment'),
+            'merchantId' => config('services.braintree.merchantId'),
+            'publicKey' => config('services.braintree.publicKey'),
+            'privateKey' => config('services.braintree.privateKey')
+        ]);
+
+
+        $token = $gateway->ClientToken()->generate();
+
+
+
+        return view('buy_old', compact('DoIChargeVat', 'SC_Price', 'ThisUser', 'AA_Price' ,'IG_Price', 'SI_Price', 'DE_Price', 'PR_Price', 'Total_Lic_AA', 'Total_Lic_IG', 'Total_Lic_PR', 'Total_Lic_SI', 'Total_Lic_DE', 'Total_Lic_SC', 'Free_Lic_AA', 'Free_Lic_IG', 'Free_Lic_PR', 'Free_Lic_SI', 'Free_Lic_DE', 'Free_Lic_SC', 'token'));
+    }
+
+    public function cc_purchase(Request $request){
+        //dd($request);
         //// gather plugins from form
         $aa_y = request('AA_Year');
         $ig_y = request('IG_Year');
@@ -141,7 +205,6 @@ class UserBuyController extends Controller{
 
         $OrderId = $New_Transactions->id;
 
-
         $gateway = new Braintree\Gateway([
             'environment' => config('services.braintree.environment'),
             'merchantId' => config('services.braintree.merchantId'),
@@ -151,9 +214,7 @@ class UserBuyController extends Controller{
 
 
         $result = $gateway->transaction()->sale([
-
             'amount' => $request->amount,
-
             'paymentMethodNonce' => $request->payment_method_nonce,
 
             //            'orderId' => rand(5,10),
@@ -185,22 +246,20 @@ class UserBuyController extends Controller{
             ]
         ]);
 
-
-        if ($result->success)
-        {
-            dd(" transaction successfully T-ID:" . $result->transaction->id);
-        }else
-        {
+        //  Bad Payment and reture to user
+        if ($result->success != true){
+            //dd('bad');
+            $The_New_Transactions = $New_Transactions->id;
+            $DidDelete = Licence_Transactions::where('id', $The_New_Transactions)->delete();
             $errorString = "";
-
-            foreach ($result->errors->deepAll() as $error) {
+            foreach ($result->errors->deepAll() as $error) 
                 $errorString .= 'Error: ' . $error->code . ": " . $error->message . "\n";
-            }
 
             return back()->withErrors('An error occurred with the message: '.$result->message);
         }
 
+        // All good
+        dd(" transaction successfully T-ID:" . $result->transaction->id);
 
     }
-
 }

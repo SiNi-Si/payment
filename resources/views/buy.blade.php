@@ -325,7 +325,11 @@ $SiNi_admin_id = "Shopping";
                         <div class="tab-pane fade show active" id="SiNi_Card">
                             <div class="card">
                                 <div class="card-body" style="padding: 30px; min-height: 280px;">
+                                    <div id="CC_ERROR" class="alert alert-danger" style="display: none;">
+                                        <h4 id="CC_ERROR_MESSAGE">none</h4>
+                                    </div>
                                     <form action="{{ url('/User/Buy/Purchase') }}" class="container-full" method="POST" id="payment-form">
+                                        @csrf
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <h4>SiNi Software does not store any credit card information on our server.  We use a secure payment system call <a href="https://www.braintreepayments.com/" target="_blank">BrainTree</a> owned by paypal.</h4>
@@ -341,64 +345,315 @@ $SiNi_admin_id = "Shopping";
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="email">Email address</label>
+                                                    <label for="email">Email Address</label>
                                                     <input type="email" class="form-control" id="email" value="{{$ThisUser->email}}" placeholder="you@example.com">
                                                     <span id="help-email" class="help-block"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="billing-phone">Billing phone number</label>
+                                                    <label for="billing-phone">Phone Number</label>
                                                     <input type="billing-phone" class="form-control" id="billing-phone" value="" placeholder="123-456-7890">
                                                     <span id="help-billing-phone" class="help-block"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="billing-given-name">Billing first name</label>
+                                                    <label for="billing-given-name">First Name</label>
                                                     <input type="billing-given-name" class="form-control" value="{{$ThisUser->first_name}}" id="billing-given-name" placeholder="First">
                                                     <span id="help-billing-given-name" class="help-block"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="billing-surname">Billing last name</label>
+                                                    <label for="billing-surname">Last Name</label>
                                                     <input type="billing-surname" class="form-control" value="{{$ThisUser->last_name}}" id="billing-surname" placeholder="Last">
                                                     <span id="help-billing-surname" class="help-block"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="billing-street-address">Billing street address</label>
+                                                    <label for="billing-street-address">Address</label>
                                                     <input type="billing-street-address" class="form-control" value="{{$ThisUser->address}}" id="billing-street-address" placeholder="123 Street">
                                                     <span id="help-billing-street-address" class="help-block"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label for="billing-locality">Billing city/Town</label>
+                                                    <label for="billing-locality">City/Town</label>
                                                     <input type="billing-locality" class="form-control" value="{{$ThisUser->city}}" id="billing-locality" placeholder="City">
                                                     <span id="help-billing-locality" class="help-block"></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label for="billing-region">Billing region</label>
+                                                    <label for="billing-region">Region/State</label>
                                                     <input type="billing-region" class="form-control" id="billing-region" placeholder="State">
                                                     <span id="help-billing-region" class="help-block"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label for="billing-postal-code">Billing post code</label>
+                                                    <label for="billing-postal-code">Postcode/Zip</label>
                                                     <input type="billing-postal-code" class="form-control" value="{{$ThisUser->zip}}" id="billing-postal-code" placeholder="12345">
                                                     <span id="help-billing-postal-code" class="help-block"></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label for="billing-country-code">Billing Country</label>
+                                                    <label for="billing-country-code">Country</label>
+                                                    <!--------
                                                     <input type="billing-country-code" class="form-control" value="{{$ThisUser->country}}" id="billing-country-code" placeholder="XX">
+                                                    --------->
+                                                    <select type="billing-country-code" id="billing-country-code" class="form-control" value="{{$ThisUser->country}}" name="country" id="country">
+                                                        <option value=""> - Select Country - </option>
+                                                        <option value="AF"<?=$ThisUser->country == 'AF' ? ' selected="selected"' : '';?>>Afghanistan</option>
+                                                        <option value="AX"<?=$ThisUser->country == 'AX' ? ' selected="selected"' : '';?>>Aland Islands</option>
+                                                        <option value="AL"<?=$ThisUser->country == 'AL' ? ' selected="selected"' : '';?>>Albania</option>
+                                                        <option value="DZ"<?=$ThisUser->country == 'DZ' ? ' selected="selected"' : '';?>>Algeria</option>
+                                                        <option value="AS"<?=$ThisUser->country == 'AS' ? ' selected="selected"' : '';?>>American Samoa</option>
+                                                        <option value="AD"<?=$ThisUser->country == 'AD' ? ' selected="selected"' : '';?>>Andorra</option>
+                                                        <option value="AO"<?=$ThisUser->country == 'AO' ? ' selected="selected"' : '';?>>Angola</option>
+                                                        <option value="AI"<?=$ThisUser->country == 'AI' ? ' selected="selected"' : '';?>>Anguilla</option>
+                                                        <option value="AQ"<?=$ThisUser->country == 'AQ' ? ' selected="selected"' : '';?>>Antarctica</option>
+                                                        <option value="AG"<?=$ThisUser->country == 'AG' ? ' selected="selected"' : '';?>>Antigua and Barbuda</option>
+                                                        <option value="AR"<?=$ThisUser->country == 'AR' ? ' selected="selected"' : '';?>>Argentina</option>
+                                                        <option value="AM"<?=$ThisUser->country == 'AM' ? ' selected="selected"' : '';?>>Armenia</option>
+                                                        <option value="AW"<?=$ThisUser->country == 'AW' ? ' selected="selected"' : '';?>>Aruba</option>
+                                                        <option value="AU"<?=$ThisUser->country == 'AU' ? ' selected="selected"' : '';?>>Australia</option>
+                                                        <option value="AT"<?=$ThisUser->country == 'AT' ? ' selected="selected"' : '';?>>Austria</option>
+                                                        <option value="AZ"<?=$ThisUser->country == 'AZ' ? ' selected="selected"' : '';?>>Azerbaijan</option>
+                                                        <option value="BS"<?=$ThisUser->country == 'BS' ? ' selected="selected"' : '';?>>Bahamas</option>
+                                                        <option value="BH"<?=$ThisUser->country == 'BH' ? ' selected="selected"' : '';?>>Bahrain</option>
+                                                        <option value="BD"<?=$ThisUser->country == 'BD' ? ' selected="selected"' : '';?>>Bangladesh</option>
+                                                        <option value="BB"<?=$ThisUser->country == 'BB' ? ' selected="selected"' : '';?>>Barbados</option>
+                                                        <option value="BY"<?=$ThisUser->country == 'BY' ? ' selected="selected"' : '';?>>Belarus</option>
+                                                        <option value="BE"<?=$ThisUser->country == 'BE' ? ' selected="selected"' : '';?>>Belgium</option>
+                                                        <option value="BZ"<?=$ThisUser->country == 'BZ' ? ' selected="selected"' : '';?>>Belize</option>
+                                                        <option value="BJ"<?=$ThisUser->country == 'BJ' ? ' selected="selected"' : '';?>>Benin</option>
+                                                        <option value="BM"<?=$ThisUser->country == 'BM' ? ' selected="selected"' : '';?>>Bermuda</option>
+                                                        <option value="BT"<?=$ThisUser->country == 'BT' ? ' selected="selected"' : '';?>>Bhutan</option>
+                                                        <option value="BO"<?=$ThisUser->country == 'BO' ? ' selected="selected"' : '';?>>Bolivia</option>
+                                                        <option value="BA"<?=$ThisUser->country == 'BA' ? ' selected="selected"' : '';?>>Bosnia and Herzegovina</option>
+                                                        <option value="BW"<?=$ThisUser->country == 'BW' ? ' selected="selected"' : '';?>>Botswana</option>
+                                                        <option value="BV"<?=$ThisUser->country == 'BV' ? ' selected="selected"' : '';?>>Bouvet Island</option>
+                                                        <option value="BR"<?=$ThisUser->country == 'BR' ? ' selected="selected"' : '';?>>Brazil</option>
+                                                        <option value="VG"<?=$ThisUser->country == 'VG' ? ' selected="selected"' : '';?>>British Virgin Islands</option>
+                                                        <option value="IO"<?=$ThisUser->country == 'IO' ? ' selected="selected"' : '';?>>British Indian Ocean Territory</option>
+                                                        <option value="BN"<?=$ThisUser->country == 'BN' ? ' selected="selected"' : '';?>>Brunei Darussalam</option>
+                                                        <option value="BG"<?=$ThisUser->country == 'BG' ? ' selected="selected"' : '';?>>Bulgaria</option>
+                                                        <option value="BF"<?=$ThisUser->country == 'BF' ? ' selected="selected"' : '';?>>Burkina Faso</option>
+                                                        <option value="BI"<?=$ThisUser->country == 'BI' ? ' selected="selected"' : '';?>>Burundi</option>
+                                                        <option value="KH"<?=$ThisUser->country == 'KH' ? ' selected="selected"' : '';?>>Cambodia</option>
+                                                        <option value="CM"<?=$ThisUser->country == 'CM' ? ' selected="selected"' : '';?>>Cameroon</option>
+                                                        <option value="CA"<?=$ThisUser->country == 'CA' ? ' selected="selected"' : '';?>>Canada</option>
+                                                        <option value="CV"<?=$ThisUser->country == 'CV' ? ' selected="selected"' : '';?>>Cape Verde</option>
+                                                        <option value="CF"<?=$ThisUser->country == 'CF' ? ' selected="selected"' : '';?>>Central African Republic</option>
+                                                        <option value="TD"<?=$ThisUser->country == 'TD' ? ' selected="selected"' : '';?>>Chad</option>
+                                                        <option value="CL"<?=$ThisUser->country == 'CL' ? ' selected="selected"' : '';?>>Chile</option>
+                                                        <option value="CN"<?=$ThisUser->country == 'CN' ? ' selected="selected"' : '';?>>China</option>
+                                                        <option value="HK"<?=$ThisUser->country == 'HK' ? ' selected="selected"' : '';?>>Hong Kong, SAR China</option>
+                                                        <option value="MO"<?=$ThisUser->country == 'MO' ? ' selected="selected"' : '';?>>Macao, SAR China</option>
+                                                        <option value="CX"<?=$ThisUser->country == 'CX' ? ' selected="selected"' : '';?>>Christmas Island</option>
+                                                        <option value="CC"<?=$ThisUser->country == 'CC' ? ' selected="selected"' : '';?>>Cocos (Keeling) Islands</option>
+                                                        <option value="CO"<?=$ThisUser->country == 'CO' ? ' selected="selected"' : '';?>>Colombia</option>
+                                                        <option value="KM"<?=$ThisUser->country == 'KM' ? ' selected="selected"' : '';?>>Comoros</option>
+                                                        <option value="CG"<?=$ThisUser->country == 'CG' ? ' selected="selected"' : '';?>>Congo (Brazzaville)</option>
+                                                        <option value="CD"<?=$ThisUser->country == 'CD' ? ' selected="selected"' : '';?>>Congo, (Kinshasa)</option>
+                                                        <option value="CK"<?=$ThisUser->country == 'CK' ? ' selected="selected"' : '';?>>Cook Islands</option>
+                                                        <option value="CR"<?=$ThisUser->country == 'CR' ? ' selected="selected"' : '';?>>Costa Rica</option>
+                                                        <option value="CI"<?=$ThisUser->country == 'CI' ? ' selected="selected"' : '';?>>C&ocirc;te d'Ivoire</option>
+                                                        <option value="HR"<?=$ThisUser->country == 'HR' ? ' selected="selected"' : '';?>>Croatia</option>
+                                                        <option value="CU"<?=$ThisUser->country == 'CU' ? ' selected="selected"' : '';?>>Cuba</option>
+                                                        <option value="CY"<?=$ThisUser->country == 'CY' ? ' selected="selected"' : '';?>>Cyprus</option>
+                                                        <option value="CZ"<?=$ThisUser->country == 'CZ' ? ' selected="selected"' : '';?>>Czech Republic</option>
+                                                        <option value="DK"<?=$ThisUser->country == 'DK' ? ' selected="selected"' : '';?>>Denmark</option>
+                                                        <option value="DJ"<?=$ThisUser->country == 'DJ' ? ' selected="selected"' : '';?>>Djibouti</option>
+                                                        <option value="DM"<?=$ThisUser->country == 'DM' ? ' selected="selected"' : '';?>>Dominica</option>
+                                                        <option value="DO"<?=$ThisUser->country == 'DO' ? ' selected="selected"' : '';?>>Dominican Republic</option>
+                                                        <option value="EC"<?=$ThisUser->country == 'EC' ? ' selected="selected"' : '';?>>Ecuador</option>
+                                                        <option value="EG"<?=$ThisUser->country == 'EG' ? ' selected="selected"' : '';?>>Egypt</option>
+                                                        <option value="SV"<?=$ThisUser->country == 'SV' ? ' selected="selected"' : '';?>>El Salvador</option>
+                                                        <option value="GQ"<?=$ThisUser->country == 'GQ' ? ' selected="selected"' : '';?>>Equatorial Guinea</option>
+                                                        <option value="ER"<?=$ThisUser->country == 'ER' ? ' selected="selected"' : '';?>>Eritrea</option>
+                                                        <option value="EE"<?=$ThisUser->country == 'EE' ? ' selected="selected"' : '';?>>Estonia</option>
+                                                        <option value="ET"<?=$ThisUser->country == 'ET' ? ' selected="selected"' : '';?>>Ethiopia</option>
+                                                        <option value="FK"<?=$ThisUser->country == 'FK' ? ' selected="selected"' : '';?>>Falkland Islands (Malvinas)</option>
+                                                        <option value="FO"<?=$ThisUser->country == 'FO' ? ' selected="selected"' : '';?>>Faroe Islands</option>
+                                                        <option value="FJ"<?=$ThisUser->country == 'FJ' ? ' selected="selected"' : '';?>>Fiji</option>
+                                                        <option value="FI"<?=$ThisUser->country == 'FI' ? ' selected="selected"' : '';?>>Finland</option>
+                                                        <option value="FR"<?=$ThisUser->country == 'FR' ? ' selected="selected"' : '';?>>France</option>
+                                                        <option value="GF"<?=$ThisUser->country == 'GF' ? ' selected="selected"' : '';?>>French Guiana</option>
+                                                        <option value="PF"<?=$ThisUser->country == 'PF' ? ' selected="selected"' : '';?>>French Polynesia</option>
+                                                        <option value="TF"<?=$ThisUser->country == 'TF' ? ' selected="selected"' : '';?>>French Southern Territories</option>
+                                                        <option value="GA"<?=$ThisUser->country == 'GA' ? ' selected="selected"' : '';?>>Gabon</option>
+                                                        <option value="GM"<?=$ThisUser->country == 'GM' ? ' selected="selected"' : '';?>>Gambia</option>
+                                                        <option value="GE"<?=$ThisUser->country == 'GE' ? ' selected="selected"' : '';?>>Georgia</option>
+                                                        <option value="DE"<?=$ThisUser->country == 'DE' ? ' selected="selected"' : '';?>>Germany</option>
+                                                        <option value="GH"<?=$ThisUser->country == 'GH' ? ' selected="selected"' : '';?>>Ghana</option>
+                                                        <option value="GI"<?=$ThisUser->country == 'GI' ? ' selected="selected"' : '';?>>Gibraltar</option>
+                                                        <option value="GR"<?=$ThisUser->country == 'GR' ? ' selected="selected"' : '';?>>Greece</option>
+                                                        <option value="GL"<?=$ThisUser->country == 'GL' ? ' selected="selected"' : '';?>>Greenland</option>
+                                                        <option value="GD"<?=$ThisUser->country == 'GD' ? ' selected="selected"' : '';?>>Grenada</option>
+                                                        <option value="GP"<?=$ThisUser->country == 'GP' ? ' selected="selected"' : '';?>>Guadeloupe</option>
+                                                        <option value="GU"<?=$ThisUser->country == 'GU' ? ' selected="selected"' : '';?>>Guam</option>
+                                                        <option value="GT"<?=$ThisUser->country == 'GT' ? ' selected="selected"' : '';?>>Guatemala</option>
+                                                        <option value="GG"<?=$ThisUser->country == 'GG' ? ' selected="selected"' : '';?>>Guernsey</option>
+                                                        <option value="GN"<?=$ThisUser->country == 'GN' ? ' selected="selected"' : '';?>>Guinea</option>
+                                                        <option value="GW"<?=$ThisUser->country == 'GW' ? ' selected="selected"' : '';?>>Guinea-Bissau</option>
+                                                        <option value="GY"<?=$ThisUser->country == 'GY' ? ' selected="selected"' : '';?>>Guyana</option>
+                                                        <option value="HT"<?=$ThisUser->country == 'HT' ? ' selected="selected"' : '';?>>Haiti</option>
+                                                        <option value="HM"<?=$ThisUser->country == 'HM' ? ' selected="selected"' : '';?>>Heard and Mcdonald Islands</option>
+                                                        <option value="VA"<?=$ThisUser->country == 'VA' ? ' selected="selected"' : '';?>>Holy See (Vatican City State)</option>
+                                                        <option value="HN"<?=$ThisUser->country == 'HN' ? ' selected="selected"' : '';?>>Honduras</option>
+                                                        <option value="HU"<?=$ThisUser->country == 'HU' ? ' selected="selected"' : '';?>>Hungary</option>
+                                                        <option value="IS"<?=$ThisUser->country == 'IS' ? ' selected="selected"' : '';?>>Iceland</option>
+                                                        <option value="IN"<?=$ThisUser->country == 'IN' ? ' selected="selected"' : '';?>>India</option>
+                                                        <option value="ID"<?=$ThisUser->country == 'ID' ? ' selected="selected"' : '';?>>Indonesia</option>
+                                                        <option value="IR"<?=$ThisUser->country == 'IR' ? ' selected="selected"' : '';?>>Iran</option>
+                                                        <option value="IQ"<?=$ThisUser->country == 'IQ' ? ' selected="selected"' : '';?>>Iraq</option>
+                                                        <option value="IE"<?=$ThisUser->country == 'IE' ? ' selected="selected"' : '';?>>Ireland</option>
+                                                        <option value="IM"<?=$ThisUser->country == 'IM' ? ' selected="selected"' : '';?>>Isle of Man TT</option>
+                                                        <option value="IL"<?=$ThisUser->country == 'IL' ? ' selected="selected"' : '';?>>Israel</option>
+                                                        <option value="IT"<?=$ThisUser->country == 'IT' ? ' selected="selected"' : '';?>>Italy</option>
+                                                        <option value="JM"<?=$ThisUser->country == 'JM' ? ' selected="selected"' : '';?>>Jamaica</option>
+                                                        <option value="JP"<?=$ThisUser->country == 'JP' ? ' selected="selected"' : '';?>>Japan</option>
+                                                        <option value="JE"<?=$ThisUser->country == 'JE' ? ' selected="selected"' : '';?>>Jersey</option>
+                                                        <option value="JO"<?=$ThisUser->country == 'JO' ? ' selected="selected"' : '';?>>Jordan</option>
+                                                        <option value="KZ"<?=$ThisUser->country == 'KZ' ? ' selected="selected"' : '';?>>Kazakhstan</option>
+                                                        <option value="KE"<?=$ThisUser->country == 'KE' ? ' selected="selected"' : '';?>>Kenya</option>
+                                                        <option value="KI"<?=$ThisUser->country == 'KI' ? ' selected="selected"' : '';?>>Kiribati</option>
+                                                        <option value="KP"<?=$ThisUser->country == 'KP' ? ' selected="selected"' : '';?>>Korea (North)</option>
+                                                        <option value="KR"<?=$ThisUser->country == 'KR' ? ' selected="selected"' : '';?>>Korea (South)</option>
+                                                        <option value="KW"<?=$ThisUser->country == 'KW' ? ' selected="selected"' : '';?>>Kuwait</option>
+                                                        <option value="KG"<?=$ThisUser->country == 'KG' ? ' selected="selected"' : '';?>>Kyrgyzstan</option>
+                                                        <option value="LA"<?=$ThisUser->country == 'LA' ? ' selected="selected"' : '';?>>Lao PDR</option>
+                                                        <option value="LV"<?=$ThisUser->country == 'LV' ? ' selected="selected"' : '';?>>Latvia</option>
+                                                        <option value="LB"<?=$ThisUser->country == 'LB' ? ' selected="selected"' : '';?>>Lebanon</option>
+                                                        <option value="LS"<?=$ThisUser->country == 'LS' ? ' selected="selected"' : '';?>>Lesotho</option>
+                                                        <option value="LR"<?=$ThisUser->country == 'LR' ? ' selected="selected"' : '';?>>Liberia</option>
+                                                        <option value="LY"<?=$ThisUser->country == 'LY' ? ' selected="selected"' : '';?>>Libya</option>
+                                                        <option value="LI"<?=$ThisUser->country == 'LI' ? ' selected="selected"' : '';?>>Liechtenstein</option>
+                                                        <option value="LT"<?=$ThisUser->country == 'LT' ? ' selected="selected"' : '';?>>Lithuania</option>
+                                                        <option value="LU"<?=$ThisUser->country == 'LU' ? ' selected="selected"' : '';?>>Luxembourg</option>
+                                                        <option value="MK"<?=$ThisUser->country == 'MK' ? ' selected="selected"' : '';?>>Macedonia, Republic of</option>
+                                                        <option value="MG"<?=$ThisUser->country == 'MG' ? ' selected="selected"' : '';?>>Madagascar</option>
+                                                        <option value="MW"<?=$ThisUser->country == 'MW' ? ' selected="selected"' : '';?>>Malawi</option>
+                                                        <option value="MY"<?=$ThisUser->country == 'MY' ? ' selected="selected"' : '';?>>Malaysia</option>
+                                                        <option value="MV"<?=$ThisUser->country == 'MV' ? ' selected="selected"' : '';?>>Maldives</option>
+                                                        <option value="ML"<?=$ThisUser->country == 'ML' ? ' selected="selected"' : '';?>>Mali</option>
+                                                        <option value="MT"<?=$ThisUser->country == 'MT' ? ' selected="selected"' : '';?>>Malta</option>
+                                                        <option value="MH"<?=$ThisUser->country == 'MH' ? ' selected="selected"' : '';?>>Marshall Islands</option>
+                                                        <option value="MQ"<?=$ThisUser->country == 'MQ' ? ' selected="selected"' : '';?>>Martinique</option>
+                                                        <option value="MR"<?=$ThisUser->country == 'MR' ? ' selected="selected"' : '';?>>Mauritania</option>
+                                                        <option value="MU"<?=$ThisUser->country == 'MU' ? ' selected="selected"' : '';?>>Mauritius</option>
+                                                        <option value="YT"<?=$ThisUser->country == 'YT' ? ' selected="selected"' : '';?>>Mayotte</option>
+                                                        <option value="MX"<?=$ThisUser->country == 'MX' ? ' selected="selected"' : '';?>>Mexico</option>
+                                                        <option value="FM"<?=$ThisUser->country == 'FM' ? ' selected="selected"' : '';?>>Micronesia, Federated States of</option>
+                                                        <option value="MD"<?=$ThisUser->country == 'MD' ? ' selected="selected"' : '';?>>Moldova</option>
+                                                        <option value="MC"<?=$ThisUser->country == 'MC' ? ' selected="selected"' : '';?>>Monaco</option>
+                                                        <option value="MN"<?=$ThisUser->country == 'MN' ? ' selected="selected"' : '';?>>Mongolia</option>
+                                                        <option value="ME"<?=$ThisUser->country == 'ME' ? ' selected="selected"' : '';?>>Montenegro</option>
+                                                        <option value="MS"<?=$ThisUser->country == 'MS' ? ' selected="selected"' : '';?>>Montserrat</option>
+                                                        <option value="MA"<?=$ThisUser->country == 'MA' ? ' selected="selected"' : '';?>>Morocco</option>
+                                                        <option value="MZ"<?=$ThisUser->country == 'MZ' ? ' selected="selected"' : '';?>>Mozambique</option>
+                                                        <option value="MM"<?=$ThisUser->country == 'MM' ? ' selected="selected"' : '';?>>Myanmar</option>
+                                                        <option value="NA"<?=$ThisUser->country == 'NA' ? ' selected="selected"' : '';?>>Namibia</option>
+                                                        <option value="NR"<?=$ThisUser->country == 'NR' ? ' selected="selected"' : '';?>>Nauru</option>
+                                                        <option value="NP"<?=$ThisUser->country == 'NP' ? ' selected="selected"' : '';?>>Nepal</option>
+                                                        <option value="NL"<?=$ThisUser->country == 'NL' ? ' selected="selected"' : '';?>>Netherlands</option>
+                                                        <option value="AN"<?=$ThisUser->country == 'AN' ? ' selected="selected"' : '';?>>Netherlands Antilles</option>
+                                                        <option value="NC"<?=$ThisUser->country == 'NC' ? ' selected="selected"' : '';?>>New Caledonia</option>
+                                                        <option value="NZ"<?=$ThisUser->country == 'NZ' ? ' selected="selected"' : '';?>>New Zealand</option>
+                                                        <option value="NI"<?=$ThisUser->country == 'NI' ? ' selected="selected"' : '';?>>Nicaragua</option>
+                                                        <option value="NE"<?=$ThisUser->country == 'NE' ? ' selected="selected"' : '';?>>Niger</option>
+                                                        <option value="NG"<?=$ThisUser->country == 'NG' ? ' selected="selected"' : '';?>>Nigeria</option>
+                                                        <option value="NU"<?=$ThisUser->country == 'NU' ? ' selected="selected"' : '';?>>Niue</option>
+                                                        <option value="NF"<?=$ThisUser->country == 'NF' ? ' selected="selected"' : '';?>>Norfolk Island</option>
+                                                        <option value="MP"<?=$ThisUser->country == 'MP' ? ' selected="selected"' : '';?>>Northern Mariana Islands</option>
+                                                        <option value="NO"<?=$ThisUser->country == 'NO' ? ' selected="selected"' : '';?>>Norway</option>
+                                                        <option value="OM"<?=$ThisUser->country == 'OM' ? ' selected="selected"' : '';?>>Oman</option>
+                                                        <option value="PK"<?=$ThisUser->country == 'PK' ? ' selected="selected"' : '';?>>Pakistan</option>
+                                                        <option value="PW"<?=$ThisUser->country == 'PW' ? ' selected="selected"' : '';?>>Palau</option>
+                                                        <option value="PS"<?=$ThisUser->country == 'PS' ? ' selected="selected"' : '';?>>Palestinian Territory</option>
+                                                        <option value="PA"<?=$ThisUser->country == 'PA' ? ' selected="selected"' : '';?>>Panama</option>
+                                                        <option value="PG"<?=$ThisUser->country == 'PG' ? ' selected="selected"' : '';?>>Papua New Guinea</option>
+                                                        <option value="PY"<?=$ThisUser->country == 'PY' ? ' selected="selected"' : '';?>>Paraguay</option>
+                                                        <option value="PE"<?=$ThisUser->country == 'PE' ? ' selected="selected"' : '';?>>Peru</option>
+                                                        <option value="PH"<?=$ThisUser->country == 'PH' ? ' selected="selected"' : '';?>>Philippines</option>
+                                                        <option value="PN"<?=$ThisUser->country == 'PN' ? ' selected="selected"' : '';?>>Pitcairn</option>
+                                                        <option value="PL"<?=$ThisUser->country == 'PL' ? ' selected="selected"' : '';?>>Poland</option>
+                                                        <option value="PT"<?=$ThisUser->country == 'PT' ? ' selected="selected"' : '';?>>Portugal</option>
+                                                        <option value="PR"<?=$ThisUser->country == 'PR' ? ' selected="selected"' : '';?>>Puerto Rico</option>
+                                                        <option value="QA"<?=$ThisUser->country == 'QA' ? ' selected="selected"' : '';?>>Qatar</option>
+                                                        <option value="RE"<?=$ThisUser->country == 'RE' ? ' selected="selected"' : '';?>>R&eacute;union</option>
+                                                        <option value="RO"<?=$ThisUser->country == 'RO' ? ' selected="selected"' : '';?>>Romania</option>
+                                                        <option value="RU"<?=$ThisUser->country == 'RU' ? ' selected="selected"' : '';?>>Russian Federation</option>
+                                                        <option value="RW"<?=$ThisUser->country == 'RW' ? ' selected="selected"' : '';?>>Rwanda</option>
+                                                        <option value="BL"<?=$ThisUser->country == 'BL' ? ' selected="selected"' : '';?>>Saint-Barth&eacute;lemy</option>
+                                                        <option value="SH"<?=$ThisUser->country == 'SH' ? ' selected="selected"' : '';?>>Saint Helena</option>
+                                                        <option value="KN"<?=$ThisUser->country == 'KN' ? ' selected="selected"' : '';?>>Saint Kitts and Nevis</option>
+                                                        <option value="LC"<?=$ThisUser->country == 'LC' ? ' selected="selected"' : '';?>>Saint Lucia</option>
+                                                        <option value="MF"<?=$ThisUser->country == 'MF' ? ' selected="selected"' : '';?>>Saint-Martin (French part)</option>
+                                                        <option value="PM"<?=$ThisUser->country == 'PM' ? ' selected="selected"' : '';?>>Saint Pierre and Miquelon</option>
+                                                        <option value="VC"<?=$ThisUser->country == 'VC' ? ' selected="selected"' : '';?>>Saint Vincent and Grenadines</option>
+                                                        <option value="WS"<?=$ThisUser->country == 'WS' ? ' selected="selected"' : '';?>>Samoa</option>
+                                                        <option value="SM"<?=$ThisUser->country == 'SM' ? ' selected="selected"' : '';?>>San Marino</option>
+                                                        <option value="ST"<?=$ThisUser->country == 'ST' ? ' selected="selected"' : '';?>>Sao Tome and Principe</option>
+                                                        <option value="SA"<?=$ThisUser->country == 'SA' ? ' selected="selected"' : '';?>>Saudi Arabia</option>
+                                                        <option value="SN"<?=$ThisUser->country == 'SN' ? ' selected="selected"' : '';?>>Senegal</option>
+                                                        <option value="RS"<?=$ThisUser->country == 'RS' ? ' selected="selected"' : '';?>>Serbia</option>
+                                                        <option value="SC"<?=$ThisUser->country == 'SC' ? ' selected="selected"' : '';?>>Seychelles</option>
+                                                        <option value="SL"<?=$ThisUser->country == 'SL' ? ' selected="selected"' : '';?>>Sierra Leone</option>
+                                                        <option value="SG"<?=$ThisUser->country == 'SG' ? ' selected="selected"' : '';?>>Singapore</option>
+                                                        <option value="SK"<?=$ThisUser->country == 'SK' ? ' selected="selected"' : '';?>>Slovakia</option>
+                                                        <option value="SI"<?=$ThisUser->country == 'SI' ? ' selected="selected"' : '';?>>Slovakia</option>
+                                                        <option value="SO"<?=$ThisUser->country == 'SO' ? ' selected="selected"' : '';?>>Somalia</option>
+                                                        <option value="ZA"<?=$ThisUser->country == 'ZA' ? ' selected="selected"' : '';?>>South Africa</option>
+                                                        <option value="GS"<?=$ThisUser->country == 'GS' ? ' selected="selected"' : '';?>>South Georgia and the South Sandwich Islands</option>
+                                                        <option value="SS"<?=$ThisUser->country == 'SS' ? ' selected="selected"' : '';?>>South Sudan</option>
+                                                        <option value="ES"<?=$ThisUser->country == 'ES' ? ' selected="selected"' : '';?>>Spain</option>
+                                                        <option value="LK"<?=$ThisUser->country == 'LK' ? ' selected="selected"' : '';?>>Sri Lanka</option>
+                                                        <option value="SD"<?=$ThisUser->country == 'SD' ? ' selected="selected"' : '';?>>Sudan</option>
+                                                        <option value="SR"<?=$ThisUser->country == 'SR' ? ' selected="selected"' : '';?>>Suriname</option>
+                                                        <option value="SJ"<?=$ThisUser->country == 'SJ' ? ' selected="selected"' : '';?>>Svalbard and Jan Mayen Islands</option>
+                                                        <option value="SZ"<?=$ThisUser->country == 'SZ' ? ' selected="selected"' : '';?>>Swaziland</option>
+                                                        <option value="SE"<?=$ThisUser->country == 'SE' ? ' selected="selected"' : '';?>>Sweden</option>
+                                                        <option value="CH"<?=$ThisUser->country == 'CH' ? ' selected="selected"' : '';?>>Switzerland</option>
+                                                        <option value="SY"<?=$ThisUser->country == 'SY' ? ' selected="selected"' : '';?>>Syrian Arab Republic (Syria)</option>
+                                                        <option value="TW"<?=$ThisUser->country == 'TW' ? ' selected="selected"' : '';?>>Taiwan, Republic of China</option>
+                                                        <option value="TJ"<?=$ThisUser->country == 'TJ' ? ' selected="selected"' : '';?>>Tajikistan</option>
+                                                        <option value="TZ"<?=$ThisUser->country == 'TZ' ? ' selected="selected"' : '';?>>Tanzania, United Republic of</option>
+                                                        <option value="TH"<?=$ThisUser->country == 'TH' ? ' selected="selected"' : '';?>>Thailand</option>
+                                                        <option value="TL"<?=$ThisUser->country == 'TL' ? ' selected="selected"' : '';?>>Timor-Leste</option>
+                                                        <option value="TG"<?=$ThisUser->country == 'TG' ? ' selected="selected"' : '';?>>Togo</option>
+                                                        <option value="TK"<?=$ThisUser->country == 'TK' ? ' selected="selected"' : '';?>>Tokelau</option>
+                                                        <option value="TO"<?=$ThisUser->country == 'TO' ? ' selected="selected"' : '';?>>Tonga</option>
+                                                        <option value="TT"<?=$ThisUser->country == 'TT' ? ' selected="selected"' : '';?>>Trinidad and Tobago</option>
+                                                        <option value="TN"<?=$ThisUser->country == 'TN' ? ' selected="selected"' : '';?>>Tunisia</option>
+                                                        <option value="TR"<?=$ThisUser->country == 'TR' ? ' selected="selected"' : '';?>>Turkey</option>
+                                                        <option value="TM"<?=$ThisUser->country == 'TM' ? ' selected="selected"' : '';?>>Turkmenistan</option>
+                                                        <option value="TC"<?=$ThisUser->country == 'TC' ? ' selected="selected"' : '';?>>Turks and Caicos Islands</option>
+                                                        <option value="TV"<?=$ThisUser->country == 'TV' ? ' selected="selected"' : '';?>>Tuvalu</option>
+                                                        <option value="UG"<?=$ThisUser->country == 'UG' ? ' selected="selected"' : '';?>>Uganda</option>
+                                                        <option value="UA"<?=$ThisUser->country == 'UA' ? ' selected="selected"' : '';?>>Ukraine</option>
+                                                        <option value="AE"<?=$ThisUser->country == 'AE' ? ' selected="selected"' : '';?>>United Arab Emirates</option>
+                                                        <option value="GB"<?=$ThisUser->country == 'GB' ? ' selected="selected"' : '';?>>United Kingdom</option>
+                                                        <option value="US"<?=$ThisUser->country == 'US' ? ' selected="selected"' : '';?>>United States of America</option>
+                                                        <option value="UM"<?=$ThisUser->country == 'UM' ? ' selected="selected"' : '';?>>US Minor Outlying Islands</option>
+                                                        <option value="UY"<?=$ThisUser->country == 'UY' ? ' selected="selected"' : '';?>>Uruguay</option>
+                                                        <option value="UZ"<?=$ThisUser->country == 'UZ' ? ' selected="selected"' : '';?>>Uzbekistan</option>
+                                                        <option value="VU"<?=$ThisUser->country == 'VU' ? ' selected="selected"' : '';?>>Vanuatu</option>
+                                                        <option value="VE"<?=$ThisUser->country == 'VE' ? ' selected="selected"' : '';?>>Venezuela (Bolivarian Republic)</option>
+                                                        <option value="VN"<?=$ThisUser->country == 'VN' ? ' selected="selected"' : '';?>>Viet Nam</option>
+                                                        <option value="VI"<?=$ThisUser->country == 'VI' ? ' selected="selected"' : '';?>>Virgin Islands, US</option>
+                                                        <option value="WF"<?=$ThisUser->country == 'WF' ? ' selected="selected"' : '';?>>Wallis and Futuna Islands</option>
+                                                        <option value="EH"<?=$ThisUser->country == 'EH' ? ' selected="selected"' : '';?>>Western Sahara</option>
+                                                        <option value="YE"<?=$ThisUser->country == 'YE' ? ' selected="selected"' : '';?>>Yemen</option>
+                                                        <option value="ZM"<?=$ThisUser->country == 'ZM' ? ' selected="selected"' : '';?>>Zambia</option>
+                                                        <option value="ZW"<?=$ThisUser->country == 'ZW' ? ' selected="selected"' : '';?>>Zimbabwe</option>
+
+                                                    </select>
                                                     <span id="help-billing-country-code" class="help-block"></span>
                                                 </div>
                                             </div>
@@ -509,15 +764,6 @@ $SiNi_admin_id = "Shopping";
                                                 </table>
                                             </div>
                                         </div>
-                                      
-                                        
-
-                                        <div class="row">
-                                            <div class="col-xs-6">
-
-                                          
-                                            </div>
-                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -525,15 +771,62 @@ $SiNi_admin_id = "Shopping";
                         <div class="tab-pane fade" id="SiNi_PP">
                             <div class="card">
                                 <div class="card-body" style="padding: 30px; min-height: 340px;">
-                                    <div class="row">
-                                        <div class="col-md-12" style="padding-bottom: 20px;">
-                                            PAY PAL HERE
-                                            <input type="text" class="form-control" id="CC_Price2" name="CC_Price2" readonly="">
+                                    <form action="{{ url('/User/Buy/Purchase') }}" class="container-full" method="POST" id="payment-form">
+                                        @csrf
+                                        @if (session()->has('success_message'))
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-success">
+                                                        {{ session()->get('success_message') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if(count($errors) > 0)
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger">
+                                                        <ul>
+                                                            @foreach ($errors->all() as $error)
+                                                            <li><{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="their_email">User Associated With Payment</label>
+                                                    <input type="text" class="form-control" value="{{$ThisUser->email}}" name="their_email" readonly="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="amount">Amount</label>
+                                                    <input type="text" class="form-control" id="CC_Price2" name="CC_Price2" readonly="">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6" style="padding-top: 30px;">
-                                            <div style="display: none;" id="paypal-button"></div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+
+                                            </div>
+                                            <div class="col-md-4" style="height: 50px;">
+                                                Checking out with PayPal will open the PayPal window to login to your account.
+                                            </div>
+                                            <div class="col-md-6" style="padding-top: 30px;">
+                                                <div style="display: none;" id="paypal-button"></div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -569,7 +862,10 @@ var Form_Vat = 0;
 var Form_TotalAmount = 0;
 var Form_Amount = 0;
 
+////////  BRAINTREE HOSTED FIELDS  --------------------------------------------------------------------------------------------------
 var hf, threeDS;
+var CC_ERROR = document.getElementById('CC_ERROR');
+var CC_ERROR_MESSAGE = document.getElementById('CC_ERROR_MESSAGE'); 
 var hostedFieldsContainer = document.getElementById('hosted-fields');
 var payBtn = document.getElementById('pay-btn');
 var nonceGroup = document.querySelector('.nonce-group');
@@ -577,229 +873,294 @@ var nonceInput = document.querySelector('.nonce-group input');
 var nonceSpan = document.querySelector('.nonce-group span');
 var payGroup = document.querySelector('.pay-group');
 var billingFields = [
-  'email',
-  'billing-phone',
-  'billing-given-name',
-  'billing-surname',
-  'billing-street-address',
-  'billing-locality',
-  'billing-region',
-  'billing-postal-code',
-  'billing-country-code'
+    'email',
+    'billing-phone',
+    'billing-given-name',
+    'billing-surname',
+    'billing-street-address',
+    'billing-locality',
+    'billing-region',
+    'billing-postal-code',
+    'billing-country-code'
 ].reduce(function (fields, fieldName) {
-  var field = fields[fieldName] = {
-    input: document.getElementById(fieldName),
-    help: document.getElementById('help-' + fieldName)
-  };
-  
-  field.input.addEventListener('focus', function() {
-    clearFieldValidations(field);
-  });
+    var field = fields[fieldName] = {
+        input: document.getElementById(fieldName),
+        help: document.getElementById('help-' + fieldName)
+    };
 
-  return fields;
+    field.input.addEventListener('focus', function() {
+        clearFieldValidations(field);
+    });
+
+    return fields;
 }, {});
 
+//// THIS WILL BE DELETED
 function autofill(e) {
-  e.preventDefault();
-
-  billingFields.email.input.value = 'your.email@email.com';
-  billingFields['billing-phone'].input.value = '123-456-7890';
-  billingFields['billing-given-name'].input.value = 'Jane';
-  billingFields['billing-surname'].input.value = 'Doe';
-  billingFields['billing-street-address'].input.value = '123 XYZ Street';
-  billingFields['billing-locality'].input.value = 'Anytown';
-  billingFields['billing-region'].input.value = 'CA';
-  billingFields['billing-postal-code'].input.value = '12345';
-  billingFields['billing-country-code'].input.value = 'US';
-  
-  Object.keys(billingFields).forEach(function (field) {
-    clearFieldValidations(billingFields[field]);
-  });
+    e.preventDefault();
+    billingFields.email.input.value = 'your.email@email.com';
+    billingFields['billing-phone'].input.value = '123-456-7890';
+    billingFields['billing-given-name'].input.value = 'Jane';
+    billingFields['billing-surname'].input.value = 'Doe';
+    billingFields['billing-street-address'].input.value = '123 XYZ Street';
+    billingFields['billing-locality'].input.value = 'Anytown';
+    billingFields['billing-region'].input.value = 'CA';
+    billingFields['billing-postal-code'].input.value = '12345';
+    billingFields['billing-country-code'].input.value = 'US';
+    Object.keys(billingFields).forEach(function (field) {
+        clearFieldValidations(billingFields[field]);
+    });
 }
 
 document.getElementById('autofill').addEventListener('click', autofill);
 
 function clearFieldValidations (field) {
-  field.help.innerText = '';
-  field.help.parentNode.classList.remove('has-error');
+    field.help.innerText = '';
+    field.help.parentNode.classList.remove('has-error');
 }
 
 function validateBillingFields() {
-  var isValid = true;
+    var isValid = true;
 
-  Object.keys(billingFields).forEach(function (fieldName) {
-    var fieldEmpty = false;
-    var field = billingFields[fieldName];
+    Object.keys(billingFields).forEach(function (fieldName) {
+        var fieldEmpty = false;
+        var field = billingFields[fieldName];
 
-    if (field.optional) {
-      return;
-    }
+        if (field.optional) {
+            return;
+        }
 
-    fieldEmpty = field.input.value.trim() === '';
+        fieldEmpty = field.input.value.trim() === '';
 
-    if (fieldEmpty) {
-      isValid = false;
-      field.help.innerText = 'Field cannot be blank.';
-      field.help.parentNode.classList.add('has-error');
-    } else {
-      clearFieldValidations(field);
-    }
-  });
-
-  return isValid;
+        if (fieldEmpty) {
+            isValid = false;
+            field.help.innerText = 'Field cannot be blank.';
+            field.help.parentNode.classList.add('has-error');
+            CC_ERROR.style.display = 'block'; 
+            CC_ERROR_MESSAGE.innerHTML = 'Field cannot be blank.'; 
+            //CC_ERROR_MESSAGE
+        } 
+        else {
+            clearFieldValidations(field);
+        }
+    });
+    return isValid;
 }
 
 function start() {
-  getClientToken();
+    getClientToken();
 }
 
 function getClientToken() {
-  var xhr = new XMLHttpRequest();
-  
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 201) {
-      onFetchClientToken(JSON.parse(xhr.responseText).client_token);  
-    }
-  };
-  xhr.open("GET", "https://braintree-sample-merchant.herokuapp.com/client_token", true);
+    var xhr = new XMLHttpRequest();
 
-  xhr.send(); 
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 201) {
+            onFetchClientToken(JSON.parse(xhr.responseText).client_token);  
+        }
+    };
+    xhr.open("GET", "https://braintree-sample-merchant.herokuapp.com/client_token", true);
+    xhr.send(); 
 }
 
 function setupComponents (clientToken) {
-  return Promise.all([
-    braintree.hostedFields.create({
-      authorization: '{{ $token }}',
-      styles: {
-        'input': {
-            'font-size': '16px',
-            'padding': '9px',
-        },
-        // Styling element state
-        ':focus': {
-          'color': '#fff',
-        },
-        '.valid': {
-          'color': '#28a745',
-          'border-color': '#28a745',
-          'border-style': 'solid',
-          'border-width': 'thin',
-        },
-        '.invalid': {
-          'color': '#dc3545',
-          'border-color': '#dc3545',
-          'border-style': 'solid',
-          'border-width': 'thin',
-        },
-      },
-      fields: {
-        number: {
-          selector: '#hf-number',
-          placeholder: '4111 1111 1111 1111'
-        },
-        cvv: {
-          selector: '#hf-cvv',
-          placeholder: '123'
-        },
-        expirationDate: {
-          selector: '#hf-date',
-          placeholder: '12 / 34'
-        }
-      }
-    }),
-    braintree.threeDSecure.create({
-      authorization: '{{ $token }}',
-      version: 2
-    })
-  ]);
+    return Promise.all([
+        braintree.hostedFields.create({
+            authorization: '{{ $token }}',
+                styles: {
+                    'input': {
+                    'font-size': '16px',
+                    'padding': '9px',
+                },
+                    ':focus': {
+                    'color': '#fff',
+                },
+                    '.valid': {
+                    'color': '#28a745',
+                    'border-color': '#28a745',
+                    'border-style': 'solid',
+                    'border-width': 'thin',
+                },
+                    '.invalid': {
+                    'color': '#dc3545',
+                    'border-color': '#dc3545',
+                    'border-style': 'solid',
+                    'border-width': 'thin',
+                },
+            },
+            fields: {
+                number: {
+                    selector: '#hf-number',
+                    placeholder: '4111 1111 1111 1111'
+                },
+                cvv: {
+                    selector: '#hf-cvv',
+                    placeholder: '123'
+                },
+                    expirationDate: {
+                    selector: '#hf-date',
+                    placeholder: '12 / 34'
+                }
+            }
+        }),
+        braintree.threeDSecure.create({
+            authorization: '{{ $token }}',
+            version: 2
+        })
+    ]);
 }
 
 function onFetchClientToken(clientToken) {
-  return setupComponents(clientToken).then(function(instances) { 
-    hf = instances[0];
-    threeDS = instances[1];
+    return setupComponents(clientToken).then(function(instances) { 
+        hf = instances[0];
+        threeDS = instances[1];
 
-    setupForm();
-  }).catch(function (err) {
-     console.log('component error:', err);
-  });
+        setupForm();
+    }).catch(function (err) {
+        CC_ERROR.style.display = 'block'; 
+        CC_ERROR_MESSAGE.innerHTML = 'Error: '+err; 
+        console.log('component error:', err);
+    });
 }
 
 function setupForm() {
-  enablePayNow();
+    enablePayNow();
 }
 
 function enablePayNow() {
-  payBtn.value = 'Pay Now';
-  payBtn.removeAttribute('disabled');
+    payBtn.value = 'Pay Now';
+    payBtn.removeAttribute('disabled');
 }
 
 function showNonce(payload, liabilityShift) {
-  nonceSpan.textContent = "Liability shifted: " + liabilityShift;
-  nonceInput.value = payload.nonce;
-  payGroup.classList.add('hidden');
-  hostedFieldsContainer.classList.add('hidden');
-  payGroup.style.display = 'none';
-  hostedFieldsContainer.style.display = 'none';
-  nonceGroup.classList.remove('hidden');
+    nonceSpan.textContent = "Liability shifted: " + liabilityShift;
+    nonceInput.value = payload.nonce;
+    payGroup.classList.add('hidden');
+    hostedFieldsContainer.classList.add('hidden');
+    payGroup.style.display = 'none';
+    hostedFieldsContainer.style.display = 'none';
+    nonceGroup.classList.remove('hidden');
 }
 
 payBtn.addEventListener('click', function(event) {
-  payBtn.setAttribute('disabled', 'disabled');
-  payBtn.value = 'Processing...';
-  
-  var billingIsValid = validateBillingFields();
-  
-  if (!billingIsValid) {
-    enablePayNow();
-    
-    return;
-  }
+    payBtn.setAttribute('disabled', 'disabled');
+    payBtn.value = 'Processing...';
+    var billingIsValid = validateBillingFields();
 
-  hf.tokenize().then(function (payload) {
-    return threeDS.verifyCard({
-      onLookupComplete: function (data, next) {
-        next();
-      },
-      amount: Total.toFixed(2),
-      //amount: '100.00',
-      nonce: payload.nonce,
-      bin: payload.details.bin,
-      email: billingFields.email.input.value,
-      billingAddress: {
-        givenName: billingFields['billing-given-name'].input.value,
-        surname: billingFields['billing-surname'].input.value,
-        phoneNumber: billingFields['billing-phone'].input.value.replace(/[\(\)\s\-]/g, ''), // remove (), spaces, and - from phone number
-        streetAddress: billingFields['billing-street-address'].input.value,
-        locality: billingFields['billing-locality'].input.value,
-        region: billingFields['billing-region'].input.value,
-        postalCode: billingFields['billing-postal-code'].input.value,
-        countryCodeAlpha2: billingFields['billing-country-code'].input.value
-      }
-    })
-  }).then(function (payload) {
-    if (!payload.liabilityShifted) {
-      console.log('Liability did not shift', payload);
-      showNonce(payload, false);
-      return;
+    if (!billingIsValid) {
+        enablePayNow();
+        return;
     }
 
-    console.log('verification success:', payload);
-    showNonce(payload, true);
-    // send nonce and verification data to your server
-    $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
-    //alert(payload.nonce);
-    //alert(Total.toFixed(2));
-    document.querySelector('#nonce').value = payload.nonce;
-    form.submit();
-  }).catch(function (err) {
-    console.log(err);
-    enablePayNow();
-  });
+    hf.tokenize().then(function (payload) {
+        return threeDS.verifyCard({
+            onLookupComplete: function (data, next) {
+                next();
+            },
+            amount: Total.toFixed(2),
+            nonce: payload.nonce,
+            bin: payload.details.bin,
+            email: billingFields.email.input.value,
+            billingAddress: {
+            givenName: billingFields['billing-given-name'].input.value,
+            surname: billingFields['billing-surname'].input.value,
+            phoneNumber: billingFields['billing-phone'].input.value.replace(/[\(\)\s\-]/g, ''), // remove (), spaces, and - from phone number
+            streetAddress: billingFields['billing-street-address'].input.value,
+            locality: billingFields['billing-locality'].input.value,
+            region: billingFields['billing-region'].input.value,
+            postalCode: billingFields['billing-postal-code'].input.value,
+            countryCodeAlpha2: billingFields['billing-country-code'].input.value
+        }
+    })
+    }).then(function (payload) {
+        if (!payload.liabilityShifted) {
+            console.log('Liability did not shift', payload);
+            showNonce(payload, false);
+            CC_ERROR.style.display = 'block'; 
+            CC_ERROR_MESSAGE.innerHTML = 'Error: Liability did not shift '+payload; 
+            return;
+        }
+
+        console.log('verification success:', payload);
+        showNonce(payload, true);
+        // send nonce and verification data to your server
+        $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
+        CC_ERROR.style.display = 'none'; 
+        document.querySelector('#nonce').value = payload.nonce;
+        form.submit();
+    }).catch(function (err) {
+        console.log(err);
+        CC_ERROR.style.display = 'block'; 
+        CC_ERROR_MESSAGE.innerHTML = 'Error: '+err; 
+        enablePayNow();
+    });
 });
 
 start();
+////////  PAY PAL  --------------------------------------------------------------------------------------------------
+/*
+braintree.paypalCheckout.create({
+        client: clientInstance
+        }, function (paypalCheckoutErr, paypalCheckoutInstance) {
 
+        if (paypalCheckoutErr) {
+            document.getElementById("paypal_button_bad_message").style.display = "block";
+            //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
+            document.getElementById('paypal-button').style.visibility = 'hidden';
+            //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+          return;
+        }
+
+        // Set up PayPal with the checkout.js library
+        paypal.Button.render({
+          env: 'production', // 'production' Or 'sandbox'
+          //commit: true, // This will add the transaction amount to the PayPal button
+          style: {
+                    size: 'medium',
+                    color: 'blue',
+                    shape: 'rect',
+                    tagline: false,
+                },
+          payment: function () {
+            return paypalCheckoutInstance.createPayment({
+                //flow: 'checkout', // Required
+              flow: 'vault', // Required
+              amount: Total, // Required
+              currency: 'GBP', // Required
+              enableShippingAddress: false,
+              storeInVaultOnSuccess: true,
+              //storeInVault: true,
+            });
+          },
+
+          onAuthorize: function (data, actions) {
+                return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
+                  // Submit `payload.nonce` to your server
+                    document.getElementById('paypal-button').style.visibility = 'hidden';
+                    document.getElementById("paypal_button_good_message").style.visibility = "visible";
+                    document.getElementById("paypal_button_good_message").style.display = "block";
+                    document.getElementById("submit-button").style.display = "none"; 
+                    document.querySelector('#nonce').value = payload.nonce;
+                    form.submit();
+            });
+          },
+
+          onCancel: function (data) {
+            console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+            document.getElementById('paypal-button').style.visibility = 'visible';
+            $.Notification.notify('error','top right', 'SiNi Software', 'PayPal payment cancelled');
+          },
+
+          onError: function (err) {
+            document.getElementById("paypal_button_bad_message").style.visibility = "visible";
+            document.getElementById("paypal_button_bad_message").style.display = "block";
+            document.getElementById('paypal-button').style.visibility = 'hidden';
+          }
+        }, '#paypal-button').then(function () {
+            // The PayPal button will be rendered in an html element with the id
+    });
+*/
+////////  CODE FOR BUY ITEMS -----------------------------------------------------------------------------------------
 var ThwVatNumber = false;
 var GodeDiscountPercent = 0;
 var AA_Y = <?php echo $AA_Price->price_year; ?>;
@@ -812,8 +1173,6 @@ var PR_Y = <?php echo $PR_Price->price_year; ?>;
 var PR_M = <?php echo $PR_Price->price_month; ?>;
 var DE_Y = <?php echo $DE_Price->price_year; ?>;
 var DE_M = <?php echo $DE_Price->price_month; ?>;
-
-
 
 function RunMath() {
     var AboveDiscount = "NO";
@@ -896,14 +1255,12 @@ function RunMath() {
     }
 
     /// 0 = no     1 = only if no vat number      2 = yes
+    Vat = 0;
     if(DoIChargeVat == 1){
         var Vat = (20 / 100) * DiscountTotal;
         if(ThwVatNumber == true){
             Vat = 0;
         }
-    }
-    else{
-        Vat = 0;
     }
 
     if(DoIChargeVat == 2){
@@ -922,9 +1279,7 @@ function RunMath() {
     document.getElementById("Total").value = ("£" + SubTotal.toFixed(2));
     document.getElementById("DiscountTotal").value = ("£" + DiscountAmount.toFixed(2));
     document.getElementById("Total_Discount").value = ("£" + DiscountTotal.toFixed(2));
-    //if(DoIChargeVat > 0){
     document.getElementById("Vat").value = ("£" + Vat.toFixed(2));
-    //}
 
     document.getElementById("VatTotal").value = ("£" + Total.toFixed(2));
     document.getElementById("amount").value = Total.toFixed(2);
