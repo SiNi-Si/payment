@@ -110,12 +110,12 @@ $SiNi_admin_id = "Shopping";
                                         <tr style="padding-top: 4px; padding-bottom: 4px;">
                                             <td style="width: 16%; border: none; padding-top: 0px;"></td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">All Access Monthly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($AA_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($AA_Price->price_month, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="AA_Month" id="AA_Month" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">All Access Yearly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($AA_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($AA_Price->price_year, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="AA_Year" id="AA_Year" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
@@ -125,12 +125,12 @@ $SiNi_admin_id = "Shopping";
                                         <tr>
                                             <td style="width: 16%; border: none; padding-top: 0px;"></td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">IgNite Monthly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($IG_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($IG_Price->price_month, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="IG_Month" id="IG_Month" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">IgNite Yearly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($IG_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($IG_Price->price_year, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="IG_Year" id="IG_Year" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
@@ -140,12 +140,12 @@ $SiNi_admin_id = "Shopping";
                                         <tr>
                                             <td style="width: 16%; border: none; padding-top: 0px;"></td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">SiClone Monthly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($SI_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($SI_Price->price_month, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="SI_Month" id="SI_Month" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">SiClone Yearly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($SI_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($SI_Price->price_year, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="SI_Year" id="SI_Year" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
@@ -155,12 +155,12 @@ $SiNi_admin_id = "Shopping";
                                         <tr>
                                             <td style="width: 16%; border: none; padding-top: 0px;"></td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">Disperse Monthly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($DE_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($DE_Price->price_month, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="DE_Month" id="DE_Month" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">Disperse Yearly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($DE_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($DE_Price->price_year, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="DE_Year" id="DE_Year" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
@@ -170,12 +170,12 @@ $SiNi_admin_id = "Shopping";
                                         <tr>
                                             <td style="width: 16%; border: none; padding-top: 0px;"></td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">ProxSi Monthly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($PR_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($PR_Price->price_month, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="PR_Month" id="PR_Month" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false">
                                             </td>
                                             <td style="text-align: right; border: none; padding-top: 5px;">ProxSi Yearly Subscription</td>
-                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($PR_Price, 2, '.', '')}}</td>
+                                            <td style="text-align: right; border: none; padding-top: 5px;">£{{number_format($PR_Price->price_year, 2, '.', '')}}</td>
                                             <td style="border: none; padding-top: 0px;">
                                                 <input type="number" min="0" name="PR_Year" id="PR_Year" size="3" maxlength="3" class="form-control-sm ord" style="width: 120px;" aria-invalid="false"></td>
                                             <td style="width: 3%; border: none; padding-top: 0px;"></td>
@@ -341,7 +341,7 @@ $SiNi_admin_id = "Shopping";
                                                 <button class="btn btn-warning" id="autofill">Autofill Customer Information</button>
                                             </div>
                                         </div>
-
+                                      
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
@@ -658,7 +658,7 @@ $SiNi_admin_id = "Shopping";
                                                 </div>
                                             </div>
                                         </div>
-
+                                      
                                         <div id="hosted-fields">
                                             <div class="row">
                                                 <div class="col-md-2">
@@ -735,7 +735,7 @@ $SiNi_admin_id = "Shopping";
                                                 <input id="nonce" name="payment_method_nonce" type="hidden" />
                                             </div>
                                         </div>
-
+                                      
                                         <div class="row" style="padding-top: 20px;">
                                             <div class="col-md-6  hidden">
                                                 <h4> ----------------------------- Remove Below ------------------------------</h4>
@@ -771,7 +771,7 @@ $SiNi_admin_id = "Shopping";
                         <div class="tab-pane fade" id="SiNi_PP">
                             <div class="card">
                                 <div class="card-body" style="padding: 30px; min-height: 340px;">
-                                    <form action="{{ url('/User/Buy/Purchase') }}" class="container-full" method="POST" id="payment-form">
+                                    <form action="{{ url('/User/Buy/Purchase') }}" class="container-full" method="POST" id="payment-form-paypal">
                                         @csrf
                                         @if (session()->has('success_message'))
                                             <div class="row">
@@ -806,7 +806,6 @@ $SiNi_admin_id = "Shopping";
                                                 <div class="form-group">
                                                     <label for="their_email">User Associated With Payment</label>
                                                     <input type="text" class="form-control" value="{{$ThisUser->email}}" name="their_email" readonly="">
-                                                    <input type="hidden" class="form-control" value="paypal" name="paypal">
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -824,11 +823,7 @@ $SiNi_admin_id = "Shopping";
                                                 Checking out with PayPal will open the PayPal window to login to your account.
                                             </div>
                                             <div class="col-md-6" style="padding-top: 30px;">
-                                                <div style="" id="paypal-button">
-                                                    <button class="btn" style="background-color: #0070BA;color: #ffffff">
-                                                        paypal
-                                                    </button>
-                                                </div>
+                                                <div style="display: none;" id="paypal-button"></div>
                                             </div>
                                         </div>
                                     </form>
@@ -870,7 +865,7 @@ var Form_Amount = 0;
 ////////  BRAINTREE HOSTED FIELDS  --------------------------------------------------------------------------------------------------
 var hf, threeDS;
 var CC_ERROR = document.getElementById('CC_ERROR');
-var CC_ERROR_MESSAGE = document.getElementById('CC_ERROR_MESSAGE');
+var CC_ERROR_MESSAGE = document.getElementById('CC_ERROR_MESSAGE'); 
 var hostedFieldsContainer = document.getElementById('hosted-fields');
 var payBtn = document.getElementById('pay-btn');
 var nonceGroup = document.querySelector('.nonce-group');
@@ -941,10 +936,10 @@ function validateBillingFields() {
             isValid = false;
             field.help.innerText = 'Field cannot be blank.';
             field.help.parentNode.classList.add('has-error');
-            CC_ERROR.style.display = 'block';
-            CC_ERROR_MESSAGE.innerHTML = 'Field cannot be blank.';
+            CC_ERROR.style.display = 'block'; 
+            CC_ERROR_MESSAGE.innerHTML = 'Field cannot be blank.'; 
             //CC_ERROR_MESSAGE
-        }
+        } 
         else {
             clearFieldValidations(field);
         }
@@ -961,11 +956,11 @@ function getClientToken() {
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 201) {
-            onFetchClientToken(JSON.parse(xhr.responseText).client_token);
+            onFetchClientToken(JSON.parse(xhr.responseText).client_token);  
         }
     };
     xhr.open("GET", "https://braintree-sample-merchant.herokuapp.com/client_token", true);
-    xhr.send();
+    xhr.send(); 
 }
 
 function setupComponents (clientToken) {
@@ -1016,15 +1011,15 @@ function setupComponents (clientToken) {
 }
 
 function onFetchClientToken(clientToken) {
-    return setupComponents(clientToken).then(function(instances) {
+    return setupComponents(clientToken).then(function(instances) { 
         hf = instances[0];
         threeDS = instances[1];
 
         setupForm();
     }).catch(function (err) {
-        CC_ERROR.style.display = 'block';
-        CC_ERROR_MESSAGE.innerHTML = 'Error: '+err;
-        console.log('component error:', err);
+        CC_ERROR.style.display = 'block'; 
+        CC_ERROR_MESSAGE.innerHTML = 'Error: '+err; 
+        //console.log('component error:', err);
     });
 }
 
@@ -1051,142 +1046,136 @@ payBtn.addEventListener('click', function(event) {
     payBtn.setAttribute('disabled', 'disabled');
     payBtn.value = 'Processing...';
     var billingIsValid = validateBillingFields();
-
+    alert(billingIsValid);
     if (!billingIsValid) {
         enablePayNow();
         return;
     }
+    else{
+        alert('All Good');
+        hf.tokenize().then(function (payload) {
+            return threeDS.verifyCard({
+                onLookupComplete: function (data, next) {
+                    next();
+                },
+                amount: Total.toFixed(2),
+                nonce: payload.nonce,
+                bin: payload.details.bin,
+                email: billingFields.email.input.value,
+                billingAddress: {
+                givenName: billingFields['billing-given-name'].input.value,
+                surname: billingFields['billing-surname'].input.value,
+                phoneNumber: billingFields['billing-phone'].input.value.replace(/[\(\)\s\-]/g, ''), // remove (), spaces, and - from phone number
+                streetAddress: billingFields['billing-street-address'].input.value,
+                locality: billingFields['billing-locality'].input.value,
+                region: billingFields['billing-region'].input.value,
+                postalCode: billingFields['billing-postal-code'].input.value,
+                countryCodeAlpha2: billingFields['billing-country-code'].input.value
+            }
+        })
+        }).then(function (payload) {
+            if (!payload.liabilityShifted) {
+                //console.log('Liability did not shift', payload);
+                showNonce(payload, false);
+                CC_ERROR.style.display = 'block'; 
+                CC_ERROR_MESSAGE.innerHTML = 'Error: Liability did not shift '+payload; 
+                return;
+            }
 
-    hf.tokenize().then(function (payload) {
-        return threeDS.verifyCard({
-            onLookupComplete: function (data, next) {
-                next();
-            },
-            amount: Total.toFixed(2),
-            nonce: payload.nonce,
-            bin: payload.details.bin,
-            email: billingFields.email.input.value,
-            billingAddress: {
-            givenName: billingFields['billing-given-name'].input.value,
-            surname: billingFields['billing-surname'].input.value,
-            phoneNumber: billingFields['billing-phone'].input.value.replace(/[\(\)\s\-]/g, ''), // remove (), spaces, and - from phone number
-            streetAddress: billingFields['billing-street-address'].input.value,
-            locality: billingFields['billing-locality'].input.value,
-            region: billingFields['billing-region'].input.value,
-            postalCode: billingFields['billing-postal-code'].input.value,
-            countryCodeAlpha2: billingFields['billing-country-code'].input.value
-        }
-    })
-    }).then(function (payload) {
-        if (!payload.liabilityShifted) {
-            console.log('Liability did not shift', payload);
-            showNonce(payload, false);
-            CC_ERROR.style.display = 'block';
-            CC_ERROR_MESSAGE.innerHTML = 'Error: Liability did not shift '+payload;
-            return;
-        }
-
-        console.log('verification success:', payload);
-        showNonce(payload, true);
-        // send nonce and verification data to your server
-        $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
-        CC_ERROR.style.display = 'none';
-        document.querySelector('#nonce').value = payload.nonce;
-        form.submit();
-    }).catch(function (err) {
-        console.log(err);
-        CC_ERROR.style.display = 'block';
-        CC_ERROR_MESSAGE.innerHTML = 'Error: '+err;
-        enablePayNow();
-    });
+            console.log('verification success:', payload);
+            showNonce(payload, true);
+            // send nonce and verification data to your server
+            $.Notification.notify('warning','top right', 'SiNi Software', 'Submitting Payment to BrainTree');
+            CC_ERROR.style.display = 'none'; 
+            document.querySelector('#nonce').value = payload.nonce;
+            form.submit();
+        }).catch(function (err) {
+            //console.log(err);
+            CC_ERROR.style.display = 'block'; 
+            CC_ERROR_MESSAGE.innerHTML = 'Error: '+err; 
+            enablePayNow();
+        });
+    }
 });
 
 start();
 ////////  PAY PAL  --------------------------------------------------------------------------------------------------
+/*
+braintree.paypalCheckout.create({
+        client: clientInstance
+        }, function (paypalCheckoutErr, paypalCheckoutInstance) {
 
-braintree.paypalCheckout.create({client: clientInstance}, function (paypalCheckoutErr, paypalCheckoutInstance) {
-    if (paypalCheckoutErr) {
-        document.getElementById("paypal_button_bad_message").style.display = "block";
-        //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
-        document.getElementById('paypal-button').style.visibility = 'hidden';
-        //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
-        return;
-    }
+        if (paypalCheckoutErr) {
+            document.getElementById("paypal_button_bad_message").style.display = "block";
+            //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
+            document.getElementById('paypal-button').style.visibility = 'hidden';
+            //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+          return;
+        }
 
-    // Set up PayPal with the checkout.js library
-    paypal.Button.render({
-        env: 'production', // 'production' Or 'sandbox'
-        commit: true, // This will add the transaction amount to the PayPal button
-        style: {
-            size: 'medium',
-            color: 'blue',
-            shape: 'rect',
-            tagline: false,
-        },
-        payment: function () {
+        // Set up PayPal with the checkout.js library
+        paypal.Button.render({
+          env: 'production', // 'production' Or 'sandbox'
+          //commit: true, // This will add the transaction amount to the PayPal button
+          style: {
+                    size: 'medium',
+                    color: 'blue',
+                    shape: 'rect',
+                    tagline: false,
+                },
+          payment: function () {
             return paypalCheckoutInstance.createPayment({
                 //flow: 'checkout', // Required
-                flow: 'vault', // Required
-                amount: Total, // Required
-                currency: 'GBP', // Required
-                enableShippingAddress: false,
-                storeInVaultOnSuccess: true,
-                //storeInVault: true,
+              flow: 'vault', // Required
+              amount: Total, // Required
+              currency: 'GBP', // Required
+              enableShippingAddress: false,
+              storeInVaultOnSuccess: true,
+              //storeInVault: true,
             });
-        },
+          },
 
-        onAuthorize: function (data, actions) {
-            return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
-                // Submit `payload.nonce` to your server
-                document.getElementById('paypal-button').style.visibility = 'hidden';
-                document.getElementById("paypal_button_good_message").style.visibility = "visible";
-                document.getElementById("paypal_button_good_message").style.display = "block";
-                document.getElementById("submit-button").style.display = "none";
-                document.querySelector('#nonce').value = payload.nonce;
-                form.submit();
+          onAuthorize: function (data, actions) {
+                return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
+                  // Submit `payload.nonce` to your server
+                    document.getElementById('paypal-button').style.visibility = 'hidden';
+                    document.getElementById("paypal_button_good_message").style.visibility = "visible";
+                    document.getElementById("paypal_button_good_message").style.display = "block";
+                    document.getElementById("submit-button").style.display = "none"; 
+                    document.querySelector('#nonce').value = payload.nonce;
+                    form.submit();
             });
-        },
+          },
 
-        onCancel: function (data) {
+          onCancel: function (data) {
             console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
             document.getElementById('paypal-button').style.visibility = 'visible';
             $.Notification.notify('error','top right', 'SiNi Software', 'PayPal payment cancelled');
-        },
+          },
 
-        onError: function (err) {
+          onError: function (err) {
             document.getElementById("paypal_button_bad_message").style.visibility = "visible";
             document.getElementById("paypal_button_bad_message").style.display = "block";
             document.getElementById('paypal-button').style.visibility = 'hidden';
-        }
-    }, 
-    '#paypal-button').then(function () {
-        // The PayPal button will be rendered in an html element with the id
-    
-});
-
+          }
+        }, '#paypal-button').then(function () {
+            // The PayPal button will be rendered in an html element with the id
+    });
+*/
 ////////  CODE FOR BUY ITEMS -----------------------------------------------------------------------------------------
 var ThwVatNumber = false;
 var GodeDiscountPercent = 0;
-{{--var AA_Y = <?php echo $AA_Price->price_year; ?>;--}}
-{{--var AA_M = <?php echo $AA_Price->price_month; ?>;--}}
-{{--var IG_Y = <?php echo $IG_Price->price_year; ?>;--}}
-{{--var IG_M = <?php echo $IG_Price->price_month; ?>;--}}
-{{--var SI_Y = <?php echo $SI_Price->price_year; ?>;--}}
-{{--var SI_M = <?php echo $SI_Price->price_month; ?>;--}}
-{{--var PR_Y = <?php echo $PR_Price->price_year; ?>;--}}
-{{--var PR_M = <?php echo $PR_Price->price_month; ?>;--}}
-{{--var DE_Y = <?php echo $DE_Price->price_year; ?>;--}}
-{{--var DE_M = <?php echo $DE_Price->price_month; ?>;--}}
-var AA_Y = <?php echo $AA_Price; ?>;
-var AA_M = <?php echo $AA_Price; ?>;
-var IG_Y = <?php echo $IG_Price; ?>;
-var IG_M = <?php echo $IG_Price; ?>;
-var SI_Y = <?php echo $SI_Price; ?>;
-var SI_M = <?php echo $SI_Price; ?>;
-var PR_Y = <?php echo $PR_Price; ?>;
-var PR_M = <?php echo $PR_Price; ?>;
-var DE_Y = <?php echo $DE_Price; ?>;
-var DE_M = <?php echo $DE_Price; ?>;
+var AA_Y = <?php echo $AA_Price->price_year; ?>;
+var AA_M = <?php echo $AA_Price->price_month; ?>;
+var IG_Y = <?php echo $IG_Price->price_year; ?>;
+var IG_M = <?php echo $IG_Price->price_month; ?>;
+var SI_Y = <?php echo $SI_Price->price_year; ?>;
+var SI_M = <?php echo $SI_Price->price_month; ?>;
+var PR_Y = <?php echo $PR_Price->price_year; ?>;
+var PR_M = <?php echo $PR_Price->price_month; ?>;
+var DE_Y = <?php echo $DE_Price->price_year; ?>;
+var DE_M = <?php echo $DE_Price->price_month; ?>;
+
 function RunMath() {
     var AboveDiscount = "NO";
     var FullYearDiscount = "NO";
