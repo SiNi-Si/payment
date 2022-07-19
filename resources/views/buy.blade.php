@@ -1104,65 +1104,66 @@ payBtn.addEventListener('click', function(event) {
 start();
 ////////  PAY PAL  --------------------------------------------------------------------------------------------------
 
-braintree.paypalCheckout.create({client: clientInstance}, function (paypalCheckoutErr, paypalCheckoutInstance) {
-    if (paypalCheckoutErr) {
-        document.getElementById("paypal_button_bad_message").style.display = "block";
-        //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
-        document.getElementById('paypal-button').style.visibility = 'hidden';
-        //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
-        return;
-    }
+braintree.paypalCheckout.create({
+        client: clientInstance
+        }, function (paypalCheckoutErr, paypalCheckoutInstance) {
 
-    // Set up PayPal with the checkout.js library
-    paypal.Button.render({
-        env: 'production', // 'production' Or 'sandbox'
-        commit: true, // This will add the transaction amount to the PayPal button
-        style: {
-            size: 'medium',
-            color: 'blue',
-            shape: 'rect',
-            tagline: false,
-        },
-        payment: function () {
+        if (paypalCheckoutErr) {
+            document.getElementById("paypal_button_bad_message").style.display = "block";
+            //document.getElementById("paypal_button_bad_message").style.visibility = "visible";
+            document.getElementById('paypal-button').style.visibility = 'hidden';
+            //console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+          return;
+        }
+
+        // Set up PayPal with the checkout.js library
+        paypal.Button.render({
+          env: 'production', // 'production' Or 'sandbox'
+          commit: true, // This will add the transaction amount to the PayPal button
+          style: {
+                    size: 'medium',
+                    color: 'blue',
+                    shape: 'rect',
+                    tagline: false,
+                },
+          payment: function () {
             return paypalCheckoutInstance.createPayment({
                 //flow: 'checkout', // Required
-                flow: 'vault', // Required
-                amount: Total, // Required
-                currency: 'GBP', // Required
-                enableShippingAddress: false,
-                storeInVaultOnSuccess: true,
-                //storeInVault: true,
+              flow: 'vault', // Required
+              amount: Total, // Required
+              currency: 'GBP', // Required
+              enableShippingAddress: false,
+              storeInVaultOnSuccess: true,
+              //storeInVault: true,
             });
-        },
+          },
 
-        onAuthorize: function (data, actions) {
-            return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
-                // Submit `payload.nonce` to your server
-                document.getElementById('paypal-button').style.visibility = 'hidden';
-                document.getElementById("paypal_button_good_message").style.visibility = "visible";
-                document.getElementById("paypal_button_good_message").style.display = "block";
-                document.getElementById("submit-button").style.display = "none";
-                document.querySelector('#nonce').value = payload.nonce;
-                form.submit();
+          onAuthorize: function (data, actions) {
+                return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
+                  // Submit `payload.nonce` to your server
+                    document.getElementById('paypal-button').style.visibility = 'hidden';
+                    document.getElementById("paypal_button_good_message").style.visibility = "visible";
+                    document.getElementById("paypal_button_good_message").style.display = "block";
+                    document.getElementById("submit-button").style.display = "none";
+                    document.querySelector('#nonce').value = payload.nonce;
+                    form.submit();
             });
-        },
+          },
 
-        onCancel: function (data) {
+          onCancel: function (data) {
             console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
             document.getElementById('paypal-button').style.visibility = 'visible';
             $.Notification.notify('error','top right', 'SiNi Software', 'PayPal payment cancelled');
-        },
+          },
 
-        onError: function (err) {
+          onError: function (err) {
             document.getElementById("paypal_button_bad_message").style.visibility = "visible";
             document.getElementById("paypal_button_bad_message").style.display = "block";
             document.getElementById('paypal-button').style.visibility = 'hidden';
-        }
-    }, 
-    '#paypal-button').then(function () {
-        // The PayPal button will be rendered in an html element with the id
-    
-});
+          }
+        }, '#paypal-button').then(function () {
+            // The PayPal button will be rendered in an html element with the id
+    });
 
 ////////  CODE FOR BUY ITEMS -----------------------------------------------------------------------------------------
 var ThwVatNumber = false;

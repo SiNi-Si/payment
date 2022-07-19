@@ -15,17 +15,20 @@ use App\Models\Licence_Transactions;
 use Omnipay\Omnipay;
 
 
-class UserBuyController extends Controller{
+class UserBuyController extends Controller
+{
     private $gateway;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->gateway = Omnipay::create('PayPal_Rest');
         $this->gateway->setClientId(env('PAYPAL_CLIENT_ID'));
         $this->gateway->setSecret(env('PAYPAL_CLIENT_SECRET'));
         $this->gateway->setTestMode(true);
     }
 
-    public function index(){
+    public function index()
+    {
         //$id = Auth::user()->id;
         $id = '27862';
         $ThisUser = User::where('id', $id)->first();
